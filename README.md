@@ -1,1 +1,1 @@
-Spring Boot + Spring MVC + Spring Security + JWT + Bootstrap
+Spring Boot + Spring MVC + Spring Security + JWT + Mybatis + Bootstrap
