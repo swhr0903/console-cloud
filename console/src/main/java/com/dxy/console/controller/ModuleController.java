@@ -162,14 +162,16 @@ public class ModuleController {
         List<com.dxy.console.vo.Module> modules;
         if (StringUtils.isNotBlank(moduleName)) {
             modules = moduleService.getModuleByName(moduleName);
-            String[] options = modules.get(0).getOptions().split(",");
-            StringBuilder stringBuilder = new StringBuilder();
-            int i = 0;
-            for (String option : options) {
-                stringBuilder.append(Options.getCodeByName(option)).append(i < options.length - 1 ? "," : "");
-                i++;
+            if(modules.size()>0) {
+                String[] options = modules.get(0).getOptions().split(",");
+                StringBuilder stringBuilder = new StringBuilder();
+                int i = 0;
+                for (String option : options) {
+                    stringBuilder.append(Options.getCodeByName(option)).append(i < options.length - 1 ? "," : "");
+                    i++;
+                }
+                oMap.put("option", stringBuilder.toString());
             }
-            oMap.put("option", stringBuilder.toString());
         }
         List<Map<String, String>> options = new ArrayList<>();
         Map<String, String> map;

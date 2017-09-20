@@ -5,6 +5,16 @@ $(function () {
             data: {'username': $('#username').val(), 'password': $('#password').val()},
             type: 'post',
             success: function () {
+                /*var token = jqXHR.getResponseHeader("Authorization");
+                if (token != null && token != '') {
+                    var expireTime = new Date();
+                    expireTime.setTime(expireTime.getTime() + (8 * 60 * 60 * 1000));
+                    $.cookie('Authorization', token, {expires: expireTime});
+                    window.location.href = '/';
+                } else {
+                    $('#warnModal').find('.modal-body').text("登入异常");
+                    $('#warnModal').modal('show');
+                }*/
                 window.location.href = '/';
             },
             error: function () {

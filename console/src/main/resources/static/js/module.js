@@ -41,22 +41,31 @@ $(function () {
                 $.each(data.options, function (index, value) {
                     options += '<option value="' + value.code + '">' + value.name + '</option>';
                 });
-                var oArray = data.option.split(",");
                 $("#options").empty();
                 $("#options").append(options);
                 $('#options').selectpicker('render');
                 $('#options').selectpicker('refresh');
-                $('#options').selectpicker('val', oArray);
+                var option = data.option;
+                if (option != undefined) {
+                    var oArray = option.split(",");
+                    $('#options').selectpicker('val', oArray);
+                }
             }
         });
     });
     $('#editForm').bootstrapValidator({
-        message: 'This value is not valid',
+        /*message: 'This value is not valid',
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },*/
         feedbackIcons: {
             valid: 'glyphicon glyphicon-ok',
             invalid: 'glyphicon glyphicon-remove',
             validating: 'glyphicon glyphicon-refresh'
         },
+        live: 'disabled',
         fields: {
             name: {
                 validators: {
@@ -64,14 +73,14 @@ $(function () {
                         message: '模块名不能为空'
                     }
                 }
-            },
+            }/*,
             url: {
                 validators: {
                     notEmpty: {
                         message: '模块URL不能为空'
                     }
                 }
-            }
+            }*/
         }
     });
     $('#mName').change(function () {
