@@ -1,6 +1,7 @@
 package com.dxy.console;
 
 import com.alibaba.fastjson.JSON;
+import com.dxy.console.common.Constant;
 import com.dxy.console.vo.UserRole;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,6 +13,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -24,6 +26,8 @@ import java.util.Map;
  * 拦截auth请求，生成JWT token并写入response
  */
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
+
+    private static final int EXPIRATION_TIME = 36000;
 
     public JWTLoginFilter(String url, AuthenticationManager authManager) {
         super(new AntPathRequestMatcher(url));
@@ -63,6 +67,12 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
             commaBuilder.append(role.getRole_code()).append(",");
         }
         String authorities = roles != null && roles.size() > 0 ? commaBuilder.substring(0, commaBuilder.length() - 1) : "";
-        TokenAuthenticationService.generateToken(response, userDetails.getUsername(), authorities);
+        String token = TokenAuthenticationService.generateToken(userDetails.getUsername(), authorities);
+        Cookie cookie = new Cookie(Constant.HEADER_STRING, token);
+        cookie.setHttpOnly(true);
+        //cookie.setSecure(true);
+        cookie.setMaxAge(EXPIRATION_TIME);
+        response.addCookie(cookie);
+        //response.addHeader(Constant.HEADER_STRING, token);
     }
 }

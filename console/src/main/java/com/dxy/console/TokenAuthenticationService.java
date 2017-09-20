@@ -14,8 +14,11 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +29,7 @@ import java.util.List;
 @Component
 public class TokenAuthenticationService {
 
-    private static final long EXPIRATION_TIME = 28_800_000;
+    private static final long EXPIRATION_TIME = 36000000;
     private static final String SECRET = "l4C@v9#I";
     private static final String TOKEN_PREFIX = "Bearer";
 
@@ -43,11 +46,10 @@ public class TokenAuthenticationService {
     /**
      * JWT生成
      *
-     * @param response
      * @param username
      * @param authorities
      */
-    protected static void generateToken(HttpServletResponse response, String username, String authorities) {
+    protected static String generateToken(String username, String authorities) {
         String JWT = Jwts.builder()
                 // 保存权限（角色）
                 .claim("authorities", authorities)
@@ -58,7 +60,13 @@ public class TokenAuthenticationService {
                 // 签名设置
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
-        response.addHeader(Constant.HEADER_STRING, TOKEN_PREFIX + " " + JWT);
+        String token = "";
+        try {
+            token = URLEncoder.encode(TOKEN_PREFIX + (char) 32 + JWT, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return token;
     }
 
     /**
