@@ -29,8 +29,8 @@ public class LogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
             cookie.setPath("/");
             response.addCookie(cookie);
             response.sendRedirect("/login");
-        } catch (Exception ex) {
-            logger.info("清空Cookies发生异常！");
+        } catch (Exception e) {
+            logger.info("清空Cookies发生异常！" + e.getMessage());
         }
     }
 }

@@ -1,8 +1,8 @@
 package com.dxy.console;
 
 import com.dxy.console.common.Constant;
-import com.dxy.console.vo.User;
 import com.dxy.console.service.UserService;
+import com.dxy.console.vo.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -14,9 +14,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Date;
