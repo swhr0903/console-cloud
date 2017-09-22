@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <#include "common/common.ftl">
+<#include "common/common.ftl">
     <script src="/static/js/auth.js"></script>
 </head>
 <body class="hold-transition login-page">
@@ -22,19 +22,16 @@
         <div class="row">
             <div class="col-xs-8">
                 <div class="checkbox icheck">
-                    <!--<label>
-                        <input type="checkbox"> 记住我
-                    </label>-->
                     <label>
-                        <a href="#addModal" data-toggle="modal">注册帐号</a><br>
+                        <a href="/forgetPwd">忘记密码</a><br>
+                        <a href="#addModal" data-toggle="modal">注册帐号</a>
                     </label>
                 </div>
             </div>
-            <div class="col-xs-4">
+            <div class="col-xs-4" style="margin-top: 15px">
                 <button id="login" type="button" class="btn btn-primary btn-block btn-flat">登录</button>
             </div>
         </div>
-        <!--<a href="#">忘记密码</a><br>-->
     </div>
 </div>
 <!-- 注册 -->

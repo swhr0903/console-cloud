@@ -52,13 +52,14 @@ public interface UserMapper {
     void insertUser(User user);
 
     @Update("<script>" +
-            "update t_user set " +
+            "update t_user <set> " +
             "<if test=\"username!=null and username!=''\">username=#{username},</if>" +
             "<if test=\"name!=null and name!=''\">name=#{name},</if>" +
             "<if test=\"password!=null and password!=''\">password=#{password},</if>" +
             "<if test=\"email!=null and email!=''\">email=#{email},</if>" +
-            "<if test=\"avatar!=null and avatar!=''\">avatar=#{avatar}</if>" +
-            " where id=#{id}</script>")
+            "<if test=\"avatar!=null and avatar!=''\">avatar=#{avatar}</if></set>" +
+            " where <if test=\"id!=null\">id=#{id}</if>" +
+            "<if test=\"id==null and username!=null and username!=''\">username=#{username}</if></script>")
     void updateUser(User user);
 
     @Delete("<script>" +
@@ -92,6 +93,6 @@ public interface UserMapper {
             "<if test=\"_parameter.moduleId!=null\">and a.module_id=#{_parameter.moduleId}</if>" +
             "<if test=\"_parameter.permission!=null and _parameter.permission!=''\">and a.permission like concat('%',#{_parameter.permission},'%')</if>" +
             "</script>")
-    Integer getUserAuths(Map<String,Object> params);
+    Integer getUserAuths(Map<String, Object> params);
 
 }

@@ -30,7 +30,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable();
         httpSecurity.authorizeRequests()
-                .antMatchers("/static/**", "/favicon.ico", "/user/register", "/user/isExist").permitAll()
+                .antMatchers("/static/**", "/favicon.ico", "/user/register", "/user/isExist",
+                        "/forgetPwd", "/getBackPwd", "/verifyBackPwd","/restPwd").permitAll()
                 .anyRequest().authenticated()
                 .and().formLogin().loginPage("/login").failureUrl("/login?error=true").permitAll()
                 .and().logout().logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler).permitAll()
