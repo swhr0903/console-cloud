@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.security.KeyPair;
 import java.security.interfaces.RSAPublicKey;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -172,5 +173,14 @@ public class IndexController {
     public @ResponseBody
     List<Map<Integer, Integer>> getDWCount() throws Exception {
         return indexService.getDWCount();
+    }
+
+    @RequestMapping(value = "/regiStats7")
+    public @ResponseBody
+    Map<String, List<Integer>> regiUserCount7() {
+        Map<String, List<Integer>> stats = new HashMap();
+        stats.put("regiNum", userService.regiUserCount7());
+        stats.put("regiDepositNum", userService.regiDepositCount7());
+        return stats;
     }
 }

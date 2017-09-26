@@ -3,7 +3,7 @@
 <title>大西洋管理后台</title>
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="/static/bootstrap/css/AdminLTE.css">
+<link rel="stylesheet" href="/static/bootstrap/css/AdminLTE.min.css">
 <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-table.min.css">
 <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-select.min.css">
 <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-datetimepicker.min.css">

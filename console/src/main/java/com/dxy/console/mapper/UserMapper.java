@@ -91,8 +91,26 @@ public interface UserMapper {
             "select count(1) from t_role_auth a inner join t_user_role b on a.role_id=b.role_id where 1=1" +
             "<if test=\"_parameter.userId!=null\">and b.user_id=#{_parameter.userId}</if>" +
             "<if test=\"_parameter.moduleId!=null\">and a.module_id=#{_parameter.moduleId}</if>" +
-            "<if test=\"_parameter.permission!=null and _parameter.permission!=''\">and a.permission like concat('%',#{_parameter.permission},'%')</if>" +
+            "<if test=\"_parameter.permission!=null and _parameter.permission!=''\">and a.permission " +
+            "like concat('%',#{_parameter.permission},'%')</if>" +
             "</script>")
     Integer getUserAuths(Map<String, Object> params);
 
+    @Select("<script>" +
+            "select date_format(create_date,'%Y-%m-%d') as date,count(uiid) as num from a_user_info " +
+            "where date_format(create_date,'%Y-%m-%d')&gt;=date_format(date_add(now()," +
+            "interval -7 day),'%Y-%m-%d') and date_format(create_date,'%Y-%m-%d')&lt;=date_format(now(),'%Y-%m-%d') group by " +
+            "date_format(create_date,'%Y-%m-%d') order by date_format(create_date,'%Y-%m-%d')" +
+            "</script>")
+    List<Map<String, Integer>> regiUserCount7();
+
+    @Select("<script>" +
+            "select date_format(a.create_date,'%Y-%m-%d') as date,count(distinct a.uiid) as num from a_pay_order a " +
+            "inner join (select uiid from a_user_info where create_date&gt;=date_format(" +
+            "date_add(now(),interval -7 day),'%Y-%m-%d') and create_date&lt;=date_format(now(),'%Y-%m-%d')) b " +
+            "on a.uiid=b.uiid where date_format(a.create_date,'%Y-%m-%d')&gt;=date_format(date_add(now(),interval -7 day)," +
+            "'%Y-%m-%d') and date_format(a.create_date,'%Y-%m-%d')&lt;=date_format(now(),'%Y-%m-%d') and a.paytyple=1 and " +
+            "a.status=3 group by date_format(a.create_date,'%Y-%m-%d') order by date_format(a.create_date,'%Y-%m-%d')" +
+            "</script>")
+    List<Map<String, Integer>> regiDepositCount7();
 }

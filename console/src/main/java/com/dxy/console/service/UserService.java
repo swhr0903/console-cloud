@@ -92,4 +92,10 @@ public interface UserService {
      * @return
      */
     Boolean authorized(Map<String, Object> authObj);
+
+
+    List<Integer> regiUserCount7();
+
+    List<Integer> regiDepositCount7();
+
 }

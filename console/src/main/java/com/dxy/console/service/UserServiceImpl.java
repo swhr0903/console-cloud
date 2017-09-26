@@ -8,6 +8,8 @@ import com.dxy.console.po.User;
 import com.dxy.console.vo.UserRole;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -15,15 +17,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.swing.text.html.parser.Entity;
 import java.io.File;
 import java.io.InputStream;
 import java.security.Key;
 import java.security.KeyPair;
 import java.security.interfaces.RSAPublicKey;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Frank on 2017/8/3.
@@ -42,7 +42,8 @@ public class UserServiceImpl implements UserService {
         Map<String, Object> params = new HashMap<>();
         params.put("offset", offset);
         params.put("limit", limit);
-        params.put("sort", (StringUtils.isNotBlank(sortName) ? sortName : "id") + " " + sortOrder);
+        params.put("sort", (StringUtils.isNotBlank(sortName) ? sortName : "id") + " " +
+                (StringUtils.isNotBlank(sortOrder) ? sortOrder : ""));
         params.put("username", username);
         params.put("startTime", startTime);
         params.put("endTime", endTime);
@@ -147,5 +148,43 @@ public class UserServiceImpl implements UserService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<Integer> regiUserCount7() {
+        List<Integer> data = noDataFillZero(userMapper.regiUserCount7());
+        return data;
+    }
+
+    @Override
+    public List<Integer> regiDepositCount7() {
+        List<Integer> data = noDataFillZero(userMapper.regiDepositCount7());
+        return data;
+    }
+
+    private List<Integer> noDataFillZero(List<Map<String, Integer>> datas) {
+        List<Integer> ls = new ArrayList<>();
+        String beforeToday;
+        for (int i = -6; i < 1; i++) {
+            beforeToday = DateFormatUtils.format(DateUtils.addDays(new Date(), i), "yyyy-MM-dd");
+            int j = 0;
+            a:
+            for (Map<String, Integer> data : datas) {
+                for (Map.Entry<String, Integer> entity : data.entrySet()) {
+                    if ("date".equals(entity.getKey())) {
+                        if (beforeToday.equals(entity.getValue())) {
+                            ls.add(data.get("num"));
+                            break a;
+                        } else {
+                            if (j == datas.size() - 1) {
+                                ls.add(0);
+                            }
+                        }
+                    }
+                }
+                j++;
+            }
+        }
+        return ls;
     }
 }
