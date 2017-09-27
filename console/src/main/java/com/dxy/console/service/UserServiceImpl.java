@@ -162,27 +162,43 @@ public class UserServiceImpl implements UserService {
         return data;
     }
 
+    @Override
+    public List<Integer> depositSum7() {
+        List<Integer> data = noDataFillZero(userMapper.depositSum7());
+        return data;
+    }
+
+    @Override
+    public List<Integer> withdrawSum7() {
+        List<Integer> data = noDataFillZero(userMapper.withdrawSum7());
+        return data;
+    }
+
     private List<Integer> noDataFillZero(List<Map<String, Integer>> datas) {
         List<Integer> ls = new ArrayList<>();
         String beforeToday;
         for (int i = -6; i < 1; i++) {
             beforeToday = DateFormatUtils.format(DateUtils.addDays(new Date(), i), "yyyy-MM-dd");
             int j = 0;
-            a:
-            for (Map<String, Integer> data : datas) {
-                for (Map.Entry<String, Integer> entity : data.entrySet()) {
-                    if ("date".equals(entity.getKey())) {
-                        if (beforeToday.equals(entity.getValue())) {
-                            ls.add(data.get("num"));
-                            break a;
-                        } else {
-                            if (j == datas.size() - 1) {
-                                ls.add(0);
+            if (datas != null && datas.size() > 0) {
+                a:
+                for (Map<String, Integer> data : datas) {
+                    for (Map.Entry<String, Integer> entity : data.entrySet()) {
+                        if ("date".equals(entity.getKey())) {
+                            if (beforeToday.equals(entity.getValue())) {
+                                ls.add(data.get("num"));
+                                break a;
+                            } else {
+                                if (j == datas.size() - 1) {
+                                    ls.add(0);
+                                }
                             }
                         }
                     }
+                    j++;
                 }
-                j++;
+            } else {
+                ls.add(0);
             }
         }
         return ls;

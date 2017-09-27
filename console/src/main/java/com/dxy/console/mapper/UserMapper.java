@@ -113,4 +113,23 @@ public interface UserMapper {
             "a.status=3 group by date_format(a.create_date,'%Y-%m-%d') order by date_format(a.create_date,'%Y-%m-%d')" +
             "</script>")
     List<Map<String, Integer>> regiDepositCount7();
+
+    @Select("<script>" +
+            "select date_format(create_date,'%Y-%m-%d') as date,sum(amount) as num from a_pay_order " +
+            "where date_format(create_date,'%Y-%m-%d')&gt;=date_format(date_add(now()," +
+            "interval -7 day),'%Y-%m-%d') and date_format(create_date,'%Y-%m-%d')&lt;=date_format(now(),'%Y-%m-%d') " +
+            "and paytyple=0 and status=3 group by date_format(create_date,'%Y-%m-%d') " +
+            "order by date_format(create_date,'%Y-%m-%d')" +
+            "</script>")
+    List<Map<String, Integer>> depositSum7();
+
+    @Select("<script>" +
+            "select date_format(create_date,'%Y-%m-%d') as date,sum(amount) as num from a_pay_order " +
+            "where date_format(create_date,'%Y-%m-%d')&gt;=date_format(date_add(now()," +
+            "interval -7 day),'%Y-%m-%d') and date_format(create_date,'%Y-%m-%d')&lt;=date_format(now(),'%Y-%m-%d') " +
+            "and paytyple=1 and status=3 group by date_format(create_date,'%Y-%m-%d') " +
+            "order by date_format(create_date,'%Y-%m-%d')" +
+            "</script>")
+    List<Map<String, Integer>> withdrawSum7();
+
 }

@@ -93,9 +93,33 @@ public interface UserService {
      */
     Boolean authorized(Map<String, Object> authObj);
 
-
+    /**
+     * 7天内注册人数
+     *
+     * @return
+     */
     List<Integer> regiUserCount7();
 
+    /**
+     * 7天内注册中充值人数
+     *
+     * @return
+     */
     List<Integer> regiDepositCount7();
+
+    /**
+     * 7天内充值总额
+     *
+     * @return
+     */
+    List<Integer> depositSum7();
+
+    /**
+     * 7天内提现总额
+     *
+     * @return
+     */
+    List<Integer> withdrawSum7();
+
 
 }

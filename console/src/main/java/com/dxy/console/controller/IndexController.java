@@ -175,12 +175,21 @@ public class IndexController {
         return indexService.getDWCount();
     }
 
-    @RequestMapping(value = "/regiStats7")
+    @RequestMapping(value = "/regiUserCount7")
     public @ResponseBody
     Map<String, List<Integer>> regiUserCount7() {
         Map<String, List<Integer>> stats = new HashMap();
-        stats.put("regiNum", userService.regiUserCount7());
-        stats.put("regiDepositNum", userService.regiDepositCount7());
+        stats.put("regiUserCount7", userService.regiUserCount7());
+        stats.put("regiDepositCount7", userService.regiDepositCount7());
+        return stats;
+    }
+
+    @RequestMapping(value = "/depositWCount7")
+    public @ResponseBody
+    Map<String, List<Integer>> depositWCount7() {
+        Map<String, List<Integer>> stats = new HashMap();
+        stats.put("depositSum7", userService.depositSum7());
+        stats.put("withdrawSum7", userService.withdrawSum7());
         return stats;
     }
 }
