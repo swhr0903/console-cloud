@@ -16,11 +16,11 @@ $(function () {
 });
 
 function regiStat(data) {
-    var regiStatData = {
+    var regiChartData = {
         labels: [getDay(-6), getDay(-5), getDay(-4), getDay(-3), getDay(-2), getDay(-1), getDay(0)],
         datasets: [
             {
-                label: '注册',
+                label: '注册人数',
                 fillColor: 'rgba(210, 214, 222, 1)',
                 strokeColor: 'rgba(210, 214, 222, 1)',
                 pointColor: 'rgba(210, 214, 222, 1)',
@@ -30,7 +30,7 @@ function regiStat(data) {
                 data: data.regiUserCount7
             },
             {
-                label: '充值',
+                label: '充值人数',
                 fillColor: 'rgba(60,141,188,0.9)',
                 strokeColor: 'rgba(60,141,188,0.8)',
                 pointColor: '#3b8bba',
@@ -41,13 +41,12 @@ function regiStat(data) {
             }
         ]
     };
-    var barChartCanvas = $("#regiStat").get(0).getContext("2d");
-    var barChart = new Chart(barChartCanvas);
-    var barChartData = regiStatData;
-    barChartData.datasets[1].fillColor = "#00a65a";
-    barChartData.datasets[1].strokeColor = "#00a65a";
-    barChartData.datasets[1].pointColor = "#00a65a";
-    var barChartOptions = {
+    var regiChartCanvas = $("#regiStat").get(0).getContext("2d");
+    var regiChart = new Chart(regiChartCanvas);
+    regiChartData.datasets[1].fillColor = "#00a65a";
+    regiChartData.datasets[1].strokeColor = "#00a65a";
+    regiChartData.datasets[1].pointColor = "#00a65a";
+    var regiChartOptions = {
         //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
         scaleBeginAtZero: true,
         //Boolean - Whether grid lines are shown across the chart
@@ -74,55 +73,54 @@ function regiStat(data) {
         responsive: true,
         maintainAspectRatio: true
     };
-
-    barChartOptions.datasetFill = false;
-    barChart.Bar(barChartData, barChartOptions);
+    regiChartOptions.datasetFill = false;
+    regiChart.Bar(regiChartData, regiChartOptions);
 }
 
-function depositWStat(data){
+function depositWStat(data) {
     var depositWChartOptions = {
         //Boolean - If we should show the scale at all
-        showScale               : true,
+        showScale: true,
         //Boolean - Whether grid lines are shown across the chart
-        scaleShowGridLines      : false,
+        scaleShowGridLines: false,
         //String - Colour of the grid lines
-        scaleGridLineColor      : 'rgba(0,0,0,.05)',
+        scaleGridLineColor: 'rgba(0,0,0,.05)',
         //Number - Width of the grid lines
-        scaleGridLineWidth      : 1,
+        scaleGridLineWidth: 1,
         //Boolean - Whether to show horizontal lines (except X axis)
         scaleShowHorizontalLines: true,
         //Boolean - Whether to show vertical lines (except Y axis)
-        scaleShowVerticalLines  : true,
+        scaleShowVerticalLines: true,
         //Boolean - Whether the line is curved between points
-        bezierCurve             : true,
+        bezierCurve: true,
         //Number - Tension of the bezier curve between points
-        bezierCurveTension      : 0.3,
+        bezierCurveTension: 0.3,
         //Boolean - Whether to show a dot for each point
-        pointDot                : false,
+        pointDot: false,
         //Number - Radius of each point dot in pixels
-        pointDotRadius          : 4,
+        pointDotRadius: 4,
         //Number - Pixel width of point dot stroke
-        pointDotStrokeWidth     : 1,
+        pointDotStrokeWidth: 1,
         //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
-        pointHitDetectionRadius : 20,
+        pointHitDetectionRadius: 20,
         //Boolean - Whether to show a stroke for datasets
-        datasetStroke           : true,
+        datasetStroke: true,
         //Number - Pixel width of dataset stroke
-        datasetStrokeWidth      : 2,
+        datasetStrokeWidth: 2,
         //Boolean - Whether to fill the dataset with a color
-        datasetFill             : true,
+        datasetFill: true,
         //String - A legend template
-        legendTemplate          : '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].lineColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>',
+        legendTemplate: '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].lineColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>',
         //Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
-        maintainAspectRatio     : true,
+        maintainAspectRatio: true,
         //Boolean - whether to make the chart responsive to window resizing
-        responsive              : true
+        responsive: true
     };
     var depositWStatData = {
         labels: [getDay(-6), getDay(-5), getDay(-4), getDay(-3), getDay(-2), getDay(-1), getDay(0)],
         datasets: [
             {
-                label: '充值',
+                label: '充值金额',
                 fillColor: 'rgba(210, 214, 222, 1)',
                 strokeColor: 'rgba(210, 214, 222, 1)',
                 pointColor: 'rgba(210, 214, 222, 1)',
@@ -132,7 +130,7 @@ function depositWStat(data){
                 data: data.depositSum7
             },
             {
-                label: '提现',
+                label: '提现金额',
                 fillColor: 'rgba(60,141,188,0.9)',
                 strokeColor: 'rgba(60,141,188,0.8)',
                 pointColor: '#3b8bba',
@@ -143,9 +141,9 @@ function depositWStat(data){
             }
         ]
     };
-    var depositWChartCanvas          = $('#depositWStat').get(0).getContext('2d');
-    var depositWChart                = new Chart(depositWChartCanvas);
-    var depositWChartOptions         = depositWChartOptions;
+    var depositWChartCanvas = $('#depositWStat').get(0).getContext('2d');
+    var depositWChart = new Chart(depositWChartCanvas);
+    var depositWChartOptions = depositWChartOptions;
     depositWChartOptions.datasetFill = false;
     depositWChart.Line(depositWStatData, depositWChartOptions);
 }
