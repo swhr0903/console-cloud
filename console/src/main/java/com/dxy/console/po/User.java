@@ -18,6 +18,7 @@ public class User implements Serializable {
     private Timestamp create_time;
     private String avatar;
     private Integer status;
+    private String mfa_secret;
 
     public User(){
 
@@ -31,5 +32,6 @@ public class User implements Serializable {
         this.email = user.getEmail();
         this.create_time = user.getCreate_time();
         this.status = user.getStatus();
+        this.mfa_secret=user.getMfa_secret();
     }
 }

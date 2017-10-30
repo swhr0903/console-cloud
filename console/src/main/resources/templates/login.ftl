@@ -23,13 +23,15 @@
             <div class="col-xs-8">
                 <div class="checkbox icheck">
                     <label>
+                        <a id="secondAuth" href="#">启用二次认证</a><br>
                         <a href="/forgetPwd">忘记密码</a><br>
                         <a href="#addModal" data-toggle="modal">注册帐号</a>
                     </label>
                 </div>
             </div>
-            <div class="col-xs-4" style="margin-top: 15px">
+            <div class="col-xs-4" style="margin-top: 20px">
                 <button id="login" type="button" class="btn btn-primary btn-block btn-flat">登录</button>
+                <div id="authTip" style="color: #a94442;"></div>
             </div>
         </div>
     </div>

@@ -28,7 +28,7 @@ public interface UserService {
     Integer getUserCount(String username, String startTime, String endTime) throws Exception;
 
     /**
-     * 根据帐号名获取用户
+     * 获取用户
      *
      * @param user
      * @return

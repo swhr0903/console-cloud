@@ -1,10 +1,14 @@
 package com.dxy.console.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.dxy.console.common.Constant;
+import com.dxy.console.common.GoogleAuthenticator;
 import com.dxy.console.common.MD5Utils;
 import com.dxy.console.common.RSAUtils;
 import com.dxy.console.po.User;
 import com.dxy.console.service.IndexService;
 import com.dxy.console.service.UserService;
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +16,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -20,7 +25,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.security.Key;
 import java.security.KeyPair;
 import java.security.interfaces.RSAPublicKey;
@@ -86,6 +93,75 @@ public class IndexController {
     @RequestMapping(value = "/login")
     public String login() throws Exception {
         return "login";
+    }
+
+    @RequestMapping(value = "/getAuthConfig")
+    public @ResponseBody
+    Map<String, String> getAuthConfig(String username, String password) throws Exception {
+        Map<String, String> result = new HashMap<>();
+        com.dxy.console.vo.User params = new com.dxy.console.vo.User();
+        params.setUsername(username);
+        String encodePwd = "";
+        try {
+            String keyfile = Thread.currentThread().getContextClassLoader().getResource("").getPath()
+                    + "keys/" + username + ".txt";
+            encodePwd = RSAUtils.toHexString(RSAUtils.encrypt((RSAPublicKey)
+                    RSAUtils.loadKey(keyfile, 1), password.getBytes()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        params.setPassword(encodePwd);
+        User user = userService.getUser(params);
+        if (user == null) {
+            result.put("code", "0");
+            result.put("msg", "帐号或密码错误！");
+        } else if (StringUtils.isNotBlank(user.getMfa_secret())) {
+            result.put("code", "0");
+            result.put("msg", "改帐号已绑定一台设备，如需修改请联系管理员！");
+        } else {
+            String secret = GoogleAuthenticator.generateSecretKey();
+            User upateParams = new User();
+            upateParams.setUsername(username);
+            upateParams.setMfa_secret(secret);
+            userService.updateUser(upateParams);
+            String url = GoogleAuthenticator.getQRBarcodeURL(username, "localhost", secret);
+            result.put("code", "1");
+            result.put("msg", url);
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/secondAuth")
+    private String secondAuth() {
+        return "secondAuth";
+    }
+
+    @RequestMapping(value = "/authGoogleCode")
+    @ResponseBody
+    private Map<String, String> authGoogleCode(Long authCode, HttpServletResponse response) throws Exception {
+        Map<String, String> result = new HashMap<>();
+        String userName = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ValueOperations<String, User> userOperations = redisTemplate.opsForValue();
+        User user = userOperations.get(userName);
+        long t = System.currentTimeMillis();
+        GoogleAuthenticator ga = new GoogleAuthenticator();
+        ga.setWindowSize(5);
+        boolean isAuth = ga.check_code(user.getMfa_secret(), authCode, t);
+        if (isAuth) {
+            result.put("1", "认证成功！");
+        } else {
+            try {
+                Cookie cookie = new Cookie(Constant.HEADER_STRING, null);
+                cookie.setMaxAge(0);
+                cookie.setPath("/");
+                response.addCookie(cookie);
+                response.sendRedirect("/login");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            result.put("1", "验证码错误！");
+        }
+        return result;
     }
 
     @RequestMapping(value = "/forgetPwd")

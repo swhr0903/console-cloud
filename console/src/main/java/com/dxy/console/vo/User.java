@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 @Data
 public class User implements Serializable {
     private String username;
+    private String password;
     private String startTime;
     private String endTime;
     private Integer status;

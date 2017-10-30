@@ -36,9 +36,10 @@ public interface UserMapper {
     Integer getUserCount(String username, String startTime, String endTime);
 
     @Select("<script>" +
-            "select id,username,password,name,email,create_time,avatar,status from t_user where 1=1" +
+            "select id,username,password,name,email,create_time,avatar,status,mfa_secret from t_user where 1=1" +
             "<if test=\"_parameter.username!=null and _parameter.username!=''\">and username=#{_parameter.username}</if>" +
             "<if test=\"_parameter.status!=null\">and status=#{_parameter.status}</if>" +
+            "<if test=\"_parameter.password!=null and _parameter.password!=''\">and password=#{_parameter.password}</if>" +
             "</script>")
     User getUser(com.dxy.console.vo.User user);
 
@@ -57,6 +58,7 @@ public interface UserMapper {
             "<if test=\"name!=null and name!=''\">name=#{name},</if>" +
             "<if test=\"password!=null and password!=''\">password=#{password},</if>" +
             "<if test=\"email!=null and email!=''\">email=#{email},</if>" +
+            "<if test=\"mfa_secret!=null and mfa_secret!=''\">mfa_secret=#{mfa_secret},</if>" +
             "<if test=\"avatar!=null and avatar!=''\">avatar=#{avatar}</if></set>" +
             " where <if test=\"id!=null\">id=#{id}</if>" +
             "<if test=\"id==null and username!=null and username!=''\">username=#{username}</if></script>")

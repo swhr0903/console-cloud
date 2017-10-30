@@ -5,7 +5,37 @@ $(function () {
             data: {'username': $('#username').val(), 'password': $('#password').val()},
             type: 'post',
             success: function () {
-                window.location.href = '/';
+                window.location.href = '/secondAuth';
+            },
+            error: function () {
+                $('#warnModal').find('.modal-body').text("帐号或密码错误");
+                $('#warnModal').modal('show');
+            }
+        });
+    });
+
+    $('#secondAuth').click(function () {
+        var username = $('#username').val();
+        var password = $('#password').val();
+        if (username == '' || password == '') {
+            $('#warnModal').find('.modal-body').text("帐号密码不能为空");
+            $('#warnModal').modal('show');
+            return;
+        }
+        $.ajax({
+            url: '/getAuthConfig',
+            data: {'username': username, 'password': password},
+            type: 'post',
+            success: function (result) {
+                var code = result.code;
+                if (code == '1') {
+                    var url = result.msg;
+                    var win = window.open(url, '_blank');
+                    win.focus();
+                } else {
+                    $('#warnModal').find('.modal-body').text("帐号或密码错误");
+                    $('#warnModal').modal('show');
+                }
             },
             error: function () {
                 $('#warnModal').find('.modal-body').text("帐号或密码错误");
