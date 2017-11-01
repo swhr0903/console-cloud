@@ -97,7 +97,7 @@ public class IndexController {
 
     @RequestMapping(value = "/getAuthConfig")
     public @ResponseBody
-    Map<String, String> getAuthConfig(String username, String password) throws Exception {
+    Map<String, String> getAuthConfig(HttpServletRequest request, String username, String password) throws Exception {
         Map<String, String> result = new HashMap<>();
         com.dxy.console.vo.User params = new com.dxy.console.vo.User();
         params.setUsername(username);
@@ -117,14 +117,14 @@ public class IndexController {
             result.put("msg", "帐号或密码错误！");
         } else if (StringUtils.isNotBlank(user.getMfa_secret())) {
             result.put("code", "0");
-            result.put("msg", "改帐号已绑定一台设备，如需修改请联系管理员！");
+            result.put("msg", "该帐号已绑定一台设备，如需修改请联系管理员！");
         } else {
             String secret = GoogleAuthenticator.generateSecretKey();
             User upateParams = new User();
             upateParams.setUsername(username);
             upateParams.setMfa_secret(secret);
             userService.updateUser(upateParams);
-            String url = GoogleAuthenticator.getQRBarcodeURL(username, "localhost", secret);
+            String url = GoogleAuthenticator.getQRBarcodeURL(username, request.getServerName(), secret);
             result.put("code", "1");
             result.put("msg", url);
         }

@@ -33,7 +33,7 @@ $(function () {
                     var win = window.open(url, '_blank');
                     win.focus();
                 } else {
-                    $('#warnModal').find('.modal-body').text("帐号或密码错误");
+                    $('#warnModal').find('.modal-body').text(result.msg);
                     $('#warnModal').modal('show');
                 }
             },
