@@ -74,7 +74,7 @@ public class TokenAuthenticationService {
      * @return
      */
     protected static Authentication verifyToken(HttpServletRequest request) {
-        String token = request.getHeader(Constant.HEADER_STRING);
+        String token = request.getHeader(Constant.TOKEN_HEADER_STRING);
         if (token != null) {
             // 解析 Token
             Claims claims = Jwts.parser()

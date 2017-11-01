@@ -24,7 +24,7 @@ public class LogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
                                 Authentication authentication) throws IOException, ServletException {
         try {
-            Cookie cookie = new Cookie(Constant.HEADER_STRING, null);
+            Cookie cookie = new Cookie(Constant.TOKEN_HEADER_STRING, null);
             cookie.setMaxAge(0);
             cookie.setPath("/");
             response.addCookie(cookie);

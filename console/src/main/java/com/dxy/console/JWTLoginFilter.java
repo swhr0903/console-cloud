@@ -68,11 +68,11 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         }
         String authorities = roles != null && roles.size() > 0 ? commaBuilder.substring(0, commaBuilder.length() - 1) : "";
         String token = TokenAuthenticationService.generateToken(userDetails.getUsername(), authorities);
-        Cookie cookie = new Cookie(Constant.HEADER_STRING, token);
+        Cookie cookie = new Cookie(Constant.TOKEN_HEADER_STRING, token);
         cookie.setHttpOnly(true);
         //cookie.setSecure(true);
         cookie.setMaxAge(EXPIRATION_TIME);
         response.addCookie(cookie);
-        //response.addHeader(Constant.HEADER_STRING, token);
+        //response.addHeader(Constant.TOKEN_HEADER_STRING, token);
     }
 }

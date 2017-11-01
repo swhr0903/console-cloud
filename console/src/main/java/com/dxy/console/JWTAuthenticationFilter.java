@@ -32,10 +32,10 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
             for (int i = 0; i < cookies.length; i++) {
                 c = cookies[i];
                 String cookieName = c.getName();
-                if (cookieName.equals(Constant.HEADER_STRING)) {
+                if (cookieName.equals(Constant.TOKEN_HEADER_STRING)) {
                     mutableHttpServletRequest = new MutableHttpServletRequest(httpServletRequest);
                     String cookiValue = URLDecoder.decode(c.getValue(), "UTF-8");
-                    mutableHttpServletRequest.putHeader(Constant.HEADER_STRING, cookiValue);
+                    mutableHttpServletRequest.putHeader(Constant.TOKEN_HEADER_STRING, cookiValue);
                 }
             }
         }

@@ -19,7 +19,7 @@
             <div class="col-xs-8">
                 <div class="checkbox icheck">
                     <label>
-                        <a href="/login">返回登录界面</a><br>
+                        <a href="/returnLogin">返回登录界面</a><br>
                     </label>
                 </div>
             </div>

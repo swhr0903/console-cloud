@@ -56,9 +56,13 @@ public class IndexController {
 
     @RequestMapping(value = "/")
     public String index(Model model) throws Exception {
+        String userName = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userSecondAuth = (String) redisTemplate.opsForValue().get(userName + "-secondAuth");
+        if (StringUtils.isBlank(userSecondAuth) || "0".equals(userSecondAuth)) {
+            return "/login";
+        }
         ValueOperations<String, String> StringOperations = redisTemplate.opsForValue();
         String menus = StringOperations.get("menus");
-        String userName = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (StringUtils.isBlank(userName)) {
             return "login";
         }
@@ -133,6 +137,8 @@ public class IndexController {
 
     @RequestMapping(value = "/secondAuth")
     private String secondAuth() {
+        String userName = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        redisTemplate.opsForValue().set(userName + "-secondAuth", "0", 120, TimeUnit.SECONDS);
         return "secondAuth";
     }
 
@@ -148,20 +154,26 @@ public class IndexController {
         ga.setWindowSize(5);
         boolean isAuth = ga.check_code(user.getMfa_secret(), authCode, t);
         if (isAuth) {
+            redisTemplate.opsForValue().set(userName + "-secondAuth", "1", 60, TimeUnit.SECONDS);
             result.put("1", "认证成功！");
         } else {
-            try {
-                Cookie cookie = new Cookie(Constant.HEADER_STRING, null);
-                cookie.setMaxAge(0);
-                cookie.setPath("/");
-                response.addCookie(cookie);
-                response.sendRedirect("/login");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
             result.put("1", "验证码错误！");
         }
         return result;
+    }
+
+    @RequestMapping(value = "/returnLogin")
+    public String returnLogin(HttpServletResponse response) throws Exception {
+        try {
+            Cookie cookie = new Cookie(Constant.TOKEN_HEADER_STRING, null);
+            cookie.setMaxAge(0);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+            response.sendRedirect("/login");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "login";
     }
 
     @RequestMapping(value = "/forgetPwd")
