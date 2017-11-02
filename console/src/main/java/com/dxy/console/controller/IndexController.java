@@ -58,14 +58,11 @@ public class IndexController {
     public String index(Model model) throws Exception {
         String userName = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String userSecondAuth = (String) redisTemplate.opsForValue().get(userName + "-secondAuth");
-        if (StringUtils.isBlank(userSecondAuth) || "0".equals(userSecondAuth)) {
+        if (StringUtils.isBlank(userName) || StringUtils.isBlank(userSecondAuth) || "0".equals(userSecondAuth)) {
             return "/login";
         }
         ValueOperations<String, String> StringOperations = redisTemplate.opsForValue();
         String menus = StringOperations.get("menus");
-        if (StringUtils.isBlank(userName)) {
-            return "login";
-        }
         model.addAttribute("user", userName);
         List<GrantedAuthority> grantedAuthorities = (List<GrantedAuthority>) SecurityContextHolder.getContext()
                 .getAuthentication().getAuthorities();
@@ -154,7 +151,7 @@ public class IndexController {
         ga.setWindowSize(5);
         boolean isAuth = ga.check_code(user.getMfa_secret(), authCode, t);
         if (isAuth) {
-            redisTemplate.opsForValue().set(userName + "-secondAuth", "1", 60, TimeUnit.SECONDS);
+            redisTemplate.opsForValue().set(userName + "-secondAuth", "1", 36000, TimeUnit.SECONDS);
             result.put("1", "认证成功！");
         } else {
             result.put("1", "验证码错误！");
