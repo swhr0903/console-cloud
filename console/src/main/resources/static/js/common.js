@@ -2,7 +2,7 @@ $(function () {
     //模态窗口居中
     function reposition() {
         var modal = $(this);
-        dialog = modal.find('.modal-dialog');
+        var dialog = modal.find('.modal-dialog');
         modal.css('display', 'block');
         dialog.css('margin-top', Math.max(0, ($(window).height() - dialog.height()) / 2));
     }
@@ -12,8 +12,33 @@ $(function () {
         $('.modal:visible').each(reposition);
     });
 
+    //初始化自定义头像
     var oFileInput = new FileInput();
     oFileInput.Init('user_img', '/user/uploadImg');
+
+    //保持菜单状态同步
+    $(window).on('beforeunload', function () {
+        var treeviews = $('.treeview');
+        treeviews.each(function () {
+            var tClass = $(this).attr('class');
+            if (tClass == 'treeview active') {
+                $.cookie('nodeExpandedId', $(this).attr('id'));
+                return false;
+            }
+        });
+    });
+    $(window).on('load', function () {
+        var treeviews = $('.treeview');
+        var nodeExpandedId = $.cookie('nodeExpandedId');
+        treeviews.each(function () {
+            var tId = $(this).attr('id');
+            if (tId == nodeExpandedId) {
+                //$(this).treeview('expandNode', [tId, {levels: 2, silent: true}]);
+                $(this).attr('class','treeview active');
+                return false;
+            }
+        });
+    });
 });
 
 //表格数据日期格式化
