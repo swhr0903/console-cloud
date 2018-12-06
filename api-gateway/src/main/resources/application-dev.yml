@@ -1,11 +1,17 @@
 spring:
   application:
     name: api-gateway
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration,
+      org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration,
+      com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+  security:
+    user:
+      name: frank
+      password: aa000000
 server:
   port: 8013
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://server0:8011/eureka/
-  instance:
-    prefer-ip-address: true
+      defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@eureka-server0:8011/eureka/
