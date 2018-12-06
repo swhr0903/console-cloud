@@ -20,12 +20,12 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
-# Dump of table a_pay_order
+# Dump of table t_pay_order
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `a_pay_order`;
+DROP TABLE IF EXISTS `t_pay_order`;
 
-CREATE TABLE `a_pay_order` (
+CREATE TABLE `t_pay_order` (
   `poid` varchar(64) NOT NULL COMMENT '订单ID',
   `platformorders` varchar(64) DEFAULT NULL,
   `uiid` bigint(20) DEFAULT NULL COMMENT '用户ID',
@@ -70,10 +70,10 @@ CREATE TABLE `a_pay_order` (
   KEY `indexpaytype` (`paytyple`,`status`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单明细';
 
-LOCK TABLES `a_pay_order` WRITE;
-/*!40000 ALTER TABLE `a_pay_order` DISABLE KEYS */;
+LOCK TABLES `t_pay_order` WRITE;
+/*!40000 ALTER TABLE `t_pay_order` DISABLE KEYS */;
 
-INSERT INTO `a_pay_order` (`poid`, `platformorders`, `uiid`, `paytyple`, `ordertype`, `ppid`, `paymethods`, `bankname`, `bankcard`, `openname`, `deposit`, `deposittime`, `amount`, `paystatus`, `status`, `remarks`, `ordercontent`, `create_date`, `update_date`, `uaccount`, `urealname`, `kfremarks`, `kfid`, `kfname`, `kfopttime`, `cwremarks`, `cwid`, `cwname`, `cwopttime`, `beforebalance`, `laterbalance`, `hdnumber`, `ordernumber`, `couponid`, `channel`)
+INSERT INTO `t_pay_order` (`poid`, `platformorders`, `uiid`, `paytyple`, `ordertype`, `ppid`, `paymethods`, `bankname`, `bankcard`, `openname`, `deposit`, `deposittime`, `amount`, `paystatus`, `status`, `remarks`, `ordercontent`, `create_date`, `update_date`, `uaccount`, `urealname`, `kfremarks`, `kfid`, `kfname`, `kfopttime`, `cwremarks`, `cwid`, `cwname`, `cwopttime`, `beforebalance`, `laterbalance`, `hdnumber`, `ordernumber`, `couponid`, `channel`)
 VALUES
 	('E2017070517164501','2017070517164500',522,1,0,95,0,NULL,NULL,NULL,NULL,'2017-10-09 18:21:23',0,0,3,NULL,NULL,'2017-10-09 18:21:23','2017-09-25 18:21:52','ceshi06',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'',NULL,NULL,''),
 	('E2017070517194801','2017070517194800',522,1,0,95,0,NULL,NULL,NULL,NULL,'2017-10-09 18:21:23',0,0,3,NULL,NULL,'2017-10-09 18:21:23','2017-09-25 18:21:52','ceshi06',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'',NULL,NULL,''),
@@ -989,16 +989,16 @@ VALUES
 	('YYF2017070611573685','2017070611573684',522,0,0,94,1,NULL,NULL,NULL,NULL,'2017-07-06 11:57:37',20,0,2,NULL,NULL,'2017-07-06 11:57:36','2017-07-06 11:57:37','ceshi06',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'',NULL,NULL,NULL),
 	('YYF2017070612075301','2017070612075300',522,0,0,94,1,NULL,NULL,NULL,NULL,'2017-07-06 12:07:55',100,0,2,NULL,NULL,'2017-07-06 12:07:53','2017-07-06 12:07:55','ceshi06',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'',NULL,NULL,'3');
 
-/*!40000 ALTER TABLE `a_pay_order` ENABLE KEYS */;
+/*!40000 ALTER TABLE `t_pay_order` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
-# Dump of table a_user_info
+# Dump of table t_user_info
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `a_user_info`;
+DROP TABLE IF EXISTS `t_user_info`;
 
-CREATE TABLE `a_user_info` (
+CREATE TABLE `t_user_info` (
   `uiid` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
   `account` varchar(64) NOT NULL COMMENT '帐号',
   `passwd` varchar(100) DEFAULT NULL COMMENT '密码',
@@ -1043,10 +1043,10 @@ CREATE TABLE `a_user_info` (
   KEY `sous_index` (`uname`,`phone`,`email`,`QQ`,`regip`,`create_date`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户信息表';
 
-LOCK TABLES `a_user_info` WRITE;
-/*!40000 ALTER TABLE `a_user_info` DISABLE KEYS */;
+LOCK TABLES `t_user_info` WRITE;
+/*!40000 ALTER TABLE `t_user_info` DISABLE KEYS */;
 
-INSERT INTO `a_user_info` (`uiid`, `account`, `passwd`, `accounttype`, `uname`, `atmpasswd`, `identitycard`, `phone`, `email`, `QQ`, `birthday`, `grade`, `puiid`, `lock`, `status`, `url`, `regip`, `ulabel`, `create_date`, `update_date`, `scale`, `hasgame`, `uloginip`, `logincount`, `typeflag`, `apipassword`, `phonevalid`, `emailvalid`, `clientflag`, `remark`, `relaaccount`, `relaflag`, `iparea`, `phonearea`, `regdevice`, `weekrake`, `gameplatforms`, `devicetype`, `friendname`)
+INSERT INTO `t_user_info` (`uiid`, `account`, `passwd`, `accounttype`, `uname`, `atmpasswd`, `identitycard`, `phone`, `email`, `QQ`, `birthday`, `grade`, `puiid`, `lock`, `status`, `url`, `regip`, `ulabel`, `create_date`, `update_date`, `scale`, `hasgame`, `uloginip`, `logincount`, `typeflag`, `apipassword`, `phonevalid`, `emailvalid`, `clientflag`, `remark`, `relaaccount`, `relaflag`, `iparea`, `phonearea`, `regdevice`, `weekrake`, `gameplatforms`, `devicetype`, `friendname`)
 VALUES
 	(510,'day100','46f94c8de14fb36680850768ff1b7f2a',1,NULL,'2432f6ed9fdc4332d866179b6912e086cddd0730614774f5',NULL,'13430812272',NULL,NULL,NULL,1,0,0,1,'http://localhost/register/index.do','0:0:0:0:0:0:0:1','2','2017-09-21 16:38:08','2015-08-01 15:18:48',0.0000,NULL,'0:0:0:0:0:0:0:1',14,0,'0e6fc43fd0af71e21dec8d008cfda7603fcb34d7c6b306c7',1,0,0,NULL,NULL,NULL,NULL,NULL,NULL,'1',NULL,NULL,NULL),
 	(511,'day369','36b1b4b524f4ace3ceadcfe87dd42d827226a909e1c56823',0,'王伟','6390fed3c9a09dfec51a447b61b43210495348f71c529ff1','420322199002236936','13430812274','117404826@qq.com','123456','2016-7-20',4,511,0,2,'http://localhost/register/index.do','0:0:0:0:0:0:0:1',NULL,'2017-09-21 16:38:08','2016-08-31 16:44:00',0.0000,NULL,'122.3.235.166',5269,1,'c2758900593345e3f03ed915633b407cff05a76d84b6e880',1,1,0,NULL,'111111111111111,ceshi01,ceshi02,ceshi03,ceshi04,ceshi05,ceshi13,ceshi22,day010,day100,day147,day1889,day200,day300,day333,day400,day456,day878,day889,day999,dxy8989,jimmy8,qwe123,rock888,T00001,temp123456,test003,test01,test88,testFake,tom888,vivi520,xfscce,xiaogao','1','菲律宾','未知区域','Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36','1','AGIN5,AG9,MG2,PT12,VGS13,SP14',NULL,NULL),
@@ -1169,7 +1169,7 @@ VALUES
 	(642,'lost1388500','d41aff94d083923d63d9f88242c56c4f0aaa86ed2e2f5444b41dae240ffa0fa3',0,NULL,NULL,NULL,'13352525252',NULL,NULL,NULL,1,0,0,1,'http://test.99dxy.com/register/index.do','222.127.94.9','direct','2017-09-24 20:18:37','2017-03-27 14:11:30',0.0000,NULL,'222.127.94.9',1,1,'d6393d75b17476f01bdcc2aa826b97340a6998c9792507155802cc7d26645dc0',0,0,0,NULL,NULL,'0','菲律宾',NULL,'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36','1','PT8','电脑',NULL),
 	(643,'kevin123456','11dd739faa161803a5cdf578ad4db8fd47c871ff2bc04423',0,NULL,NULL,NULL,'13131311111',NULL,NULL,NULL,1,0,0,2,'http://localhost/register/index.do','127.0.0.1','direct','2017-09-24 20:18:37','2017-06-27 22:18:35',0.0000,NULL,'180.191.159.243',1,1,'9d291cca4d40e5c262fb7f0a4fd5a921cb36f96ce34de65e',0,0,0,NULL,NULL,'0','菲律宾','河北省张家口市','Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36','1','GG15,AGIN5,SP14,IG16','电脑',NULL);
 
-/*!40000 ALTER TABLE `a_user_info` ENABLE KEYS */;
+/*!40000 ALTER TABLE `t_user_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
 

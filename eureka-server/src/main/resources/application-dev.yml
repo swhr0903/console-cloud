@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: eureka-server0
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration,
+      org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration,
+      com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+  security:
+    user:
+      name: frank
+      password: aa000000
+server:
+  port: 8011
+eureka:
+  instance:
+    hostname: ${spring.application.name}
+    instance-id: ${spring.application.name}:${server.port}
+  client:
+    register-with-eureka: false
+    fetch-registry: false

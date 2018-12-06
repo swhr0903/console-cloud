@@ -1,0 +1,51 @@
+version: '3.3'
+services:
+  nginx:
+    image: 192.168.1.102:5000/middleware/nginx:1.14.0
+    hostname: middleware_nginx
+    volumes:
+      - /home/logs/nginx:/usr/local/nginx/logs
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - console-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+          - node.labels.manage == 1
+  redis1:
+    image: 192.168.1.102:5000/middleware/redis:4.0.11
+    hostname: middleware_redis1
+    volumes:
+      - /home/logs/redis1:/logs
+      - /data/redis/1:/data
+    ports:
+      - 6379:6379
+    networks:
+      - console-net
+    command: ["/etc/redis.conf"]
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+          - node.labels.manage == 1
+  app:
+    restart: always
+    build: ./console
+    working_dir: /console
+    volumes:
+      - ./console:/console
+      - ~/.m2:/root/.m2
+    expose:
+      - "8080"
+    depends_on:
+      - nginx
+      #- mysql
+      - redis
+    command: mvn clean spring-boot:run -Dspring-boot.run.profiles=docker
