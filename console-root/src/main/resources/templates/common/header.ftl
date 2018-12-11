@@ -12,39 +12,39 @@
         </a>
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
-            <#--<li class="dropdown messages-menu">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <i class="fa fa-envelope-o"></i>
-                    <span class="label label-success">4</span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li class="header">你有4个消息</li>
-                    <li>
-                        <ul class="menu">
-                            <li>
-                                <a href="#">
-                                    <div class="pull-left">
-                                        <img src="/static/bootstrap/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                                    </div>
-                                    <h4>
-                                        技术部
-                                        <small><i class="fa fa-clock-o"></i> 5 分钟前</small>
-                                    </h4>
-                                    <p>专题页面做好了吗？</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="footer"><a href="#">查看所有消息</a></li>
-                </ul>
-            </li>-->
+                <#--<li class="dropdown messages-menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-envelope-o"></i>
+                        <span class="label label-success">4</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="header">你有4个消息</li>
+                        <li>
+                            <ul class="menu">
+                                <li>
+                                    <a href="#">
+                                        <div class="pull-left">
+                                            <img src="/static/bootstrap/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                        </div>
+                                        <h4>
+                                            技术部
+                                            <small><i class="fa fa-clock-o"></i> 5 分钟前</small>
+                                        </h4>
+                                        <p>专题页面做好了吗？</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="footer"><a href="#">查看所有消息</a></li>
+                    </ul>
+                </li>-->
                 <li class="dropdown notifications-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-bell-o"></i>
                         <span id="dwSpan" class="label label-warning">0</span>
                     </a>
                     <ul class="dropdown-menu">
-                    <#--<li id="depositHeader" class="header"></li>-->
+                        <#--<li id="depositHeader" class="header"></li>-->
                         <li>
                             <ul id="dwUl" class="menu">
 
@@ -53,37 +53,37 @@
                         <li class="footer"><a href="#">查看所有</a></li>
                     </ul>
                 </li>
-            <#--<li class="dropdown tasks-menu">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <i class="fa fa-flag-o"></i>
-                    <span class="label label-danger">9</span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li class="header">您有9个未完成任务</li>
-                    <li>
-                        <ul class="menu">
-                            <li>
-                                <a href="#">
-                                    <h3>
-                                        任务1
-                                        <small class="pull-right">20%</small>
-                                    </h3>
-                                    <div class="progress xs">
-                                        <div class="progress-bar progress-bar-aqua" style="width: 20%"
-                                             role="progressbar" aria-valuenow="20" aria-valuemin="0"
-                                             aria-valuemax="100">
-                                            <span class="sr-only">20% 完成</span>
+                <#--<li class="dropdown tasks-menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-flag-o"></i>
+                        <span class="label label-danger">9</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="header">您有9个未完成任务</li>
+                        <li>
+                            <ul class="menu">
+                                <li>
+                                    <a href="#">
+                                        <h3>
+                                            任务1
+                                            <small class="pull-right">20%</small>
+                                        </h3>
+                                        <div class="progress xs">
+                                            <div class="progress-bar progress-bar-aqua" style="width: 20%"
+                                                 role="progressbar" aria-valuenow="20" aria-valuemin="0"
+                                                 aria-valuemax="100">
+                                                <span class="sr-only">20% 完成</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="footer">
-                        <a href="#">查看所有</a>
-                    </li>
-                </ul>
-            </li>-->
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="footer">
+                            <a href="#">查看所有</a>
+                        </li>
+                    </ul>
+                </li>-->
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <img src="<#if avatar??>${avatar}<#else>/static/bootstrap/img/user2-160x160.jpg</#if>"
@@ -95,7 +95,7 @@
                             <img src="<#if avatar??>${avatar}<#else>/static/bootstrap/img/user2-160x160.jpg</#if>"
                                  class="img-circle" alt="User Image">
                             <p>
-                            ${user} - ${role}
+                                ${user} - ${role}
                                 <small>Member since ${createTime}</small>
                             </p>
                         </li>
@@ -327,18 +327,20 @@
         $('#registerForm').data('bootstrapValidator').resetForm(true);
     });
 
-    $(function(){
+    $(function () {
         dwRemind();
     });
 
     function dwRemind() {
         $.ajax({
             type: 'get',
-            url: '/getDWCount',
+            url: '/user/getDWCount',
             success: function (data) {
-                $('#dwSpan').html(data.length);
+                if (data)
+                    $('#dwSpan').html(data.length);
                 $('#dwUl').empty();
                 $.each(data, function (index, value) {
+                    console.log(value)
                     var type, style;
                     switch (value.paytyple) {
                         case 1:
@@ -358,9 +360,9 @@
                             style = 'aqua';
                     }
                     $('#dwUl').append('<li><a href="#">' +
-                            '<i class="fa fa-users text-' + style + '"></i>' +
-                            '有' + value.num + '笔' + type + '未处理' +
-                            '</a></li>');
+                        '<i class="fa fa-users text-' + style + '"></i>' +
+                        '有' + value.num + '笔' + type + '未处理' +
+                        '</a></li>');
                 });
             }
         });

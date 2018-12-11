@@ -1,7 +1,7 @@
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
-        ${title}
+            ${title}
             <small>${summary}</small>
         </h1>
         <ol class="breadcrumb">
@@ -11,6 +11,6 @@
     </section>
 
     <section class="content">
-    <#if page??><#include "${page}"></#if>
+        <#if page??><#include "${page}"></#if>
     </section>
 </div>

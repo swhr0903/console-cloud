@@ -24,13 +24,13 @@ spring:
     content-type: text/html
     enabled: true
     expose-request-attributes: false
-    expose-session-attributes: false 
-    expose-spring-macro-helpers: true 
-    prefer-file-system-access: true 
+    expose-session-attributes: false
+    expose-spring-macro-helpers: true
+    prefer-file-system-access: true
     suffix: .ftl
-    template-loader-path: classpath:/templates/ 
-    settings.template_update_delay: 0 
-    settings.default_encoding: UTF-8 
+    template-loader-path: classpath:/templates/
+    settings.template_update_delay: 0
+    settings.default_encoding: UTF-8
     settings.classic_compatible: true
     settings.date_format: yyyy-MM-dd
     settings.time_format: HH:mm:ss

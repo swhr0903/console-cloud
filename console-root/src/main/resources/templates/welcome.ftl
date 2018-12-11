@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-<#--<style>
-        img {
-            width: 100%;
-            height: 100%;
-        }
-    </style>-->
+    <#--<style>
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        </style>-->
 </head>
 <body>
 <#--<div><img src="/static/img/a.jpg"/></div>-->
@@ -18,7 +18,7 @@
                     <h3 class="box-title">注册</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                class="fa fa-minus"></i>
+                                    class="fa fa-minus"></i>
                         </button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
                         </button>
@@ -35,7 +35,7 @@
                     <h3 class="box-title">Donut Chart</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                class="fa fa-minus"></i>
+                                    class="fa fa-minus"></i>
                         </button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
                         </button>
@@ -52,7 +52,7 @@
                     <h3 class="box-title">充提</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                class="fa fa-minus"></i>
+                                    class="fa fa-minus"></i>
                         </button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
                         </button>
@@ -69,7 +69,7 @@
                     <h3 class="box-title">Bar Chart</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                class="fa fa-minus"></i>
+                                    class="fa fa-minus"></i>
                         </button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
                         </button>

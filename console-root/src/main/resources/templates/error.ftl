@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-<#include "common/common.ftl">
+    <#include "common/common.ftl">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
-<#include "common/header.ftl">
-<#include "common/left.ftl">
+    <#include "common/header.ftl">
+    <#include "common/left.ftl">
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
@@ -29,7 +29,7 @@
             </div>
         </section>
     </div>
-<#include "common/footer.ftl">
+    <#include "common/footer.ftl">
 </div>
 </body>
 </html>

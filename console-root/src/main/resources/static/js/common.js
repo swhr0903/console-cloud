@@ -34,7 +34,7 @@ $(function () {
             var tId = $(this).attr('id');
             if (tId == nodeExpandedId) {
                 //$(this).treeview('expandNode', [tId, {levels: 2, silent: true}]);
-                $(this).attr('class','treeview active');
+                $(this).attr('class', 'treeview active');
                 return false;
             }
         });

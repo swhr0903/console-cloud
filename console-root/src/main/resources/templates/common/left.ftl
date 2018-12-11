@@ -33,7 +33,7 @@
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu">
             <li class="header">导航栏</li>
-        ${menus}
+            ${menus}
         </ul>
         <!-- /.sidebar-menu -->
     </section>
@@ -47,5 +47,6 @@
             $('#isOnline').html('<i class="fa fa-circle text-fail"></i> 离线 ');
         }
     }
-    setInterval(isOnline,1000);
+
+    setInterval(isOnline, 1000);
 </script>

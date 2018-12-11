@@ -1,17 +1,58 @@
 spring:
   application:
     name: api-gateway
-  autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration,
-      org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration,
-      com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
   security:
     user:
       name: frank
       password: aa000000
+  #  autoconfigure:
+  #    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration,
+  #      org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration,
+  #      com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+  datasource:
+    druid:
+      filters: config,stat,wall
+      connect-properties: config.file=http://47.92.159.62/druid/druid-console.properties
+      url:
+      username:
+      password:
+      initial-size: 1
+      min-idle: 1
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 'x'
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+  redis:
+    host: 192.168.1.102
+    port: 6379
+    password: 123456
+    jedis:
+      pool:
+        max-active: 20
+        max-wait: -1
+        max-idle: 5
+        min-idle: 0
+    timeout: 10000
 server:
   port: 8013
 eureka:
   client:
     serviceUrl:
       defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@eureka-server0:8011/eureka/
+zuul:
+  routes:
+    user:
+      path: /user/**
+      serviceId: console-user
+      sensitiveHeaders:
+  ignore-security-headers: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

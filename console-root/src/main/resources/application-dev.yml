@@ -4,7 +4,7 @@ spring:
   datasource:
     druid:
       filters: config,stat,wall
-      connect-properties: config.file=http://47.75.200.109/druid/druid-console.properties
+      connect-properties: config.file=http://47.92.159.62/druid/druid-console.properties
       url:
       username:
       password:

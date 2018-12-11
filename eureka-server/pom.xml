@@ -18,7 +18,7 @@
         </dependency>
     </dependencies>
 
-    <!--<build>
+    <build>
         <finalName>eureka-server</finalName>
         <plugins>
             <plugin>
@@ -30,5 +30,5 @@
                 </configuration>
             </plugin>
         </plugins>
-    </build>-->
+    </build>
 </project>

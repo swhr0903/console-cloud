@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<#include "common/common.ftl">
+    <#include "common/common.ftl">
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">

@@ -10,8 +10,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * Created by Frank on 2017/8/3.
- * <p>
- * Spring Boot入口
+ *
+ * <p>Spring Boot入口
  */
 @SpringBootApplication
 @EnableDiscoveryClient
@@ -19,14 +19,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class App extends SpringBootServletInitializer {
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(App.class);
-    }
+  @Override
+  protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+    return application.sources(App.class);
+  }
 
-    public static void main(String[] args) {
-        SpringApplication.run(App.class, args);
-    }
-
-
+  public static void main(String[] args) {
+    SpringApplication.run(App.class, args);
+  }
 }

@@ -27,9 +27,9 @@
 <div class="box">
     <div id="box_body" class="box-body">
         <div id="toolbar" class="btn-group">
-        <#--<button id="btn_add" type="button" class="btn btn-default" data-toggle="modal" data-target="#addModal">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
-        </button>-->
+            <#--<button id="btn_add" type="button" class="btn btn-default" data-toggle="modal" data-target="#addModal">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+            </button>-->
             <button id="btn_edit" type="button" class="btn btn-default">
                 <span class="glyphicon glyphicon-pencil"></span>修改
             </button>

@@ -88,12 +88,12 @@
             </div>
             <div class="modal-body">
                 <form id="authForm" class="form-horizontal">
-                <#--<div class="form-group">
-                    <div class="col-lg-4">
-                        <button type="button" class="btn btn-info" id="all">全选</button>
-                        <button type="button" class="btn btn-info" id="nobody">全不选</button>
-                    </div>
-                </div>-->
+                    <#--<div class="form-group">
+                        <div class="col-lg-4">
+                            <button type="button" class="btn btn-info" id="all">全选</button>
+                            <button type="button" class="btn btn-info" id="nobody">全不选</button>
+                        </div>
+                    </div>-->
                     <div id="treeview-checkable" class=""></div>
                     <div class="form-group">
                         <div class="col-lg-2">

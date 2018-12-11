@@ -76,7 +76,7 @@ $(function () {
                     $.each(nodes, function (index, value) {
                         var node = $checkableTree.treeview('getNode', value);
                         if (moduleId == node.value || (moduleId == node.value.split('-')[0]
-                                && permission.indexOf(node.value.split('-')[1]) >= 0)) {
+                            && permission.indexOf(node.value.split('-')[1]) >= 0)) {
                             $checkableTree.treeview('checkNode', [node, {silent: true}]);
                             checkParentNode($checkableTree, node);
                         }

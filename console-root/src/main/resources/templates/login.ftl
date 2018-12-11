@@ -44,11 +44,11 @@
                 <h4 class="modal-title" id="myModalLabel">注册</h4>
             </div>
             <div class="modal-body">
-                <form id="registerForm" class="form-horizontal" action="/user/register"
-                      method="post">
+                <form id="registerForm" class="form-horizontal" method="post">
                     <div class="form-group">
                         <label class="col-lg-3 control-label">帐号</label>
                         <div class="col-lg-5">
+                            <input id="usernameRegi" class="form-control"/>
                             <div id="existTip2" style="color: #a94442;"></div>
                         </div>
                     </div>

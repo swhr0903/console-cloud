@@ -9,7 +9,6 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>api-gateway</artifactId>
     <packaging>jar</packaging>
-    <name>api-gateway Maven Webapp</name>
     <url>http://maven.apache.org</url>
 
     <dependencies>
@@ -21,19 +20,24 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.frank</groupId>
+            <artifactId>console-security</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
-    <!--<build>
-        <finalName>eureka&#45;&#45;consumer-ribbon-hystrix</finalName>
+    <build>
+        <finalName>api-gateway</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.cloud.geteway.App</mainClass>
+                    <mainClass>com.cloud.console.App</mainClass>
                     <addResources>true</addResources>
                 </configuration>
             </plugin>
         </plugins>
-    </build>-->
+    </build>
 </project>
