@@ -51,9 +51,9 @@ spring:
     settings.time_format: HH:mm:ss
     settings.datetime_format: yyyy-MM-dd HH:mm:ss
   mail:
-    host: smtp.sina.com
-    username: allanpoecn@sina.com
-    password: 5151229
+    host: smtp.qq.com
+    username: 171851986@qq.com
+    password: fvteixypptvybhbf
     properties:
       mail:
         smtp:

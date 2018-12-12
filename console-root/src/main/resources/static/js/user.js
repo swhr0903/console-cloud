@@ -87,15 +87,10 @@ $(function () {
     });
     //校验用户名唯一
     $('#usernameAdd').change(function () {
-        var params = JSON.stringify({
-            "username": $('#usernameAdd').val(),
-        });
         $.ajax({
-            url: '/user/isExist',
-            type: "post",
-            contentType: 'application/json',
+            url: '/user/isExist/' + $('#usernameAdd').val(),
+            type: "get",
             dataType: "json",
-            data: params,
             success: function (result) {
                 if (result.code == '0') {
                     $('#existTip').html(result.msg);
@@ -112,7 +107,7 @@ $(function () {
     $('#authModal').on('show.bs.modal', function (e) {
         $.ajax({
             type: 'get',
-            url: '/role/getRoles',
+            url: '/user/role/getRoles',
             success: function (data) {
                 var options = '';
                 $.each(data, function (index, value) {
@@ -165,7 +160,7 @@ $(function () {
         });
         roleStr = roleStr.substring(0, roleStr.length - 1);
         $.ajax({
-            url: '/user/auth',
+            url: '/user/author',
             type: 'post',
             dataType: 'json',
             data: {'userId': userId, 'roles': roleStr},
@@ -274,16 +269,15 @@ var EditInit = function () {
     var oInit = new Object();
     oInit.Init = function () {
         $('#edit').click(function () {
-            var params = JSON.stringify({
+            var params = {
                 'id': $('#id').val(),
                 'username': $('#usernameAdd').val(),
                 'name': $('#name').val(),
                 'email': $('#email').val()
-            });
+            };
             $.ajax({
-                url: '/user/edit',
-                type: 'post',
-                contentType: 'application/json',
+                url: '/user/update',
+                type: 'patch',
                 data: params,
                 success: function (data) {
                     if (data == '1') {
@@ -325,8 +319,8 @@ function del() {
     var params = JSON.stringify(selects);
     $.ajax({
         url: '/user/del',
-        type: 'post',
-        contentType: 'application/json',
+        type: 'delete',
+        contentType : 'application/json;charset=utf-8',
         data: params,
         success: function (data) {
             if (data == '1') {

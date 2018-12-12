@@ -15,18 +15,17 @@ $(function () {
     });
 
     $('#register').click(function () {
-        var user = JSON.stringify({
+        var user = {
             'username': $('#usernameRegi').val(),
             'name': $('#name').val(),
             'email': $('#email').val(),
             'password': $('#passwordRegi').val(),
             'confirmPassword': $('#confirmPassword').val()
-        });
+        };
         $.ajax({
             url: '/user/register',
             data: user,
             type: 'post',
-            contentType: 'application/json;charset=UTF-8',
             dataType: "json",
             success: function (result) {
                 if (result.code == 1) {

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /** Created by Frank on 2017/8/3. */
-public interface UserMapper {
+public interface SecurityMapper {
 
   @Select(
       "<script>"
@@ -28,7 +28,7 @@ public interface UserMapper {
 
   @Select(
       "<script>"
-          + "select count(1) from t_role_auth a inner join t_user_role b on a.role_id=b.role_id where 1=1"
+          + "select count(1) as isAuths from t_role_auth a inner join t_user_role b on a.role_id=b.role_id where 1=1"
           + "<if test=\"_parameter.userId!=null\">and b.user_id=#{_parameter.userId}</if>"
           + "<if test=\"_parameter.moduleId!=null\">and a.module_id=#{_parameter.moduleId}</if>"
           + "<if test=\"_parameter.permission!=null and _parameter.permission!=''\">and a.permission "

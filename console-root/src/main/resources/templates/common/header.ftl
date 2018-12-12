@@ -340,7 +340,6 @@
                     $('#dwSpan').html(data.length);
                 $('#dwUl').empty();
                 $.each(data, function (index, value) {
-                    console.log(value)
                     var type, style;
                     switch (value.paytyple) {
                         case 1:

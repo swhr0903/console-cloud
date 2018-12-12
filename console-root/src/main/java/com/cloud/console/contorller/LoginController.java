@@ -4,7 +4,6 @@ import com.cloud.console.common.Constant;
 import com.cloud.console.common.GoogleAuthenticator;
 import com.cloud.console.common.MD5Utils;
 import com.cloud.console.po.User;
-import com.cloud.console.service.SecurityService;
 import com.cloud.console.service.UserService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +33,7 @@ import java.util.concurrent.TimeUnit;
 public class LoginController {
 
   @Autowired RedisTemplate redisTemplate;
-  @Autowired
-  UserService userService;
+  @Autowired UserService userService;
   @Autowired JavaMailSender javaMailSender;
 
   @Value("${spring.mail.username}")
@@ -85,7 +83,7 @@ public class LoginController {
     }
     ValueOperations<String, String> StringOperations = redisTemplate.opsForValue();
     String menus = StringOperations.get("menus");
-    model.addAttribute("user", username);
+    model.addAttribute("user", userName);
     List<GrantedAuthority> grantedAuthorities =
         (List<GrantedAuthority>)
             SecurityContextHolder.getContext().getAuthentication().getAuthorities();
@@ -155,8 +153,7 @@ public class LoginController {
   }
 
   @RequestMapping(value = "/authGoogleCode")
-  public @ResponseBody Map<String, String> authGoogleCode(
-      Long authCode, HttpServletResponse response) {
+  public @ResponseBody Map<String, String> authGoogleCode(Long authCode) {
     Map<String, String> result = new HashMap<>();
     String userName =
         (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -185,7 +182,7 @@ public class LoginController {
       return 0;
     }
     SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-    simpleMailMessage.setFrom(userName);
+    simpleMailMessage.setFrom(username);
     simpleMailMessage.setTo(user.getEmail());
     simpleMailMessage.setSubject("主题：DXY找回密码");
     StringBuffer requestURL = request.getRequestURL();
@@ -196,7 +193,7 @@ public class LoginController {
             .toString();
     int num = (int) (Math.random() * 6);
     String sid = MD5Utils.generate(String.valueOf(num));
-    redisTemplate.opsForValue().set(userName + "-sid", sid, 60, TimeUnit.SECONDS);
+    redisTemplate.opsForValue().set(userName + "-sid", sid, 120, TimeUnit.SECONDS);
     String url = domainName + "verifyBackPwd?userName=" + userName + "&sid=" + sid;
     String text = "请点击下面链接重置密码\t\n" + url;
     simpleMailMessage.setText(text);
@@ -215,7 +212,7 @@ public class LoginController {
   }
 
   @RequestMapping(value = "/403")
-  public String accessDenied(Model model) throws Exception {
+  public String accessDenied(Model model) {
     ValueOperations<String, String> StringOperations = redisTemplate.opsForValue();
     String menus = StringOperations.get("menus");
     String userName =

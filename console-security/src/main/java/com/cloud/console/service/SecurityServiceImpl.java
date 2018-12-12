@@ -1,6 +1,6 @@
 package com.cloud.console.service;
 
-import com.cloud.console.mapper.UserMapper;
+import com.cloud.console.mapper.SecurityMapper;
 import com.cloud.console.po.User;
 import com.cloud.console.vo.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,23 +15,28 @@ import java.util.Map;
 public class SecurityServiceImpl implements SecurityService {
 
   @Autowired RedisTemplate redisTemplate;
-  @Autowired UserMapper userMapper;
+  @Autowired
+  SecurityMapper securityMapper;
 
   @Override
   public User getUser(com.cloud.console.vo.User user) {
-    return userMapper.getUser(user);
+    return securityMapper.getUser(user);
   }
 
   @Override
   public List<UserRole> getUserRoles(String param) {
-    return userMapper.getUserRoles(param);
+    return securityMapper.getUserRoles(param);
   }
 
   @Override
   public Boolean authorized(Map<String, Object> authObj) {
-    Integer roleAuths = userMapper.getUserAuths(authObj);
-    if (roleAuths > 0) {
-      return true;
+    try {
+      Integer roleAuths = securityMapper.getUserAuths(authObj);
+      if (roleAuths > 0) {
+        return true;
+      }
+    } catch (Throwable t) {
+      t.printStackTrace();
     }
     return false;
   }

@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -30,52 +28,9 @@ import java.util.Map;
 public class UserController {
 
   @Autowired RedisTemplate redisTemplate;
-  @Autowired
-  UserService userService;
+  @Autowired UserService userService;
 
-  @RequestMapping("/all")
-  @PreAuthorize("authenticated and hasPermission(3, 'all')")
-  public String users(Model model) {
-    ValueOperations<String, String> StringOperations = redisTemplate.opsForValue();
-    String menus = StringOperations.get("menus");
-    String userName =
-        (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    if (StringUtils.isBlank(userName)) {
-      return "login";
-    }
-    model.addAttribute("user", userName);
-    List<GrantedAuthority> grantedAuthorities =
-        (List<GrantedAuthority>)
-            SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-    StringBuilder roles = new StringBuilder();
-    for (int i = 0; i < grantedAuthorities.size(); i++) {
-      GrantedAuthority grantedAuthority = grantedAuthorities.get(i);
-      roles
-          .append(grantedAuthority.getAuthority().split("_")[1])
-          .append(i < grantedAuthorities.size() - 1 ? "," : "");
-    }
-    if ("admin".equals(userName)) {
-      model.addAttribute("role", "ADMIN");
-    } else {
-      model.addAttribute(
-          "role", StringUtils.isNotBlank(roles.toString()) ? roles.toString() : "NEWBIE");
-    }
-    ValueOperations<String, User> userOperations = redisTemplate.opsForValue();
-    User user = userOperations.get(userName);
-    model.addAttribute("page", "user.ftl");
-    String avatar = user.getAvatar();
-    if (StringUtils.isNotBlank(avatar)) {
-      model.addAttribute("avatar", avatar);
-    }
-    model.addAttribute("createTime", user.getCreate_time());
-    model.addAttribute("menus", menus);
-    model.addAttribute("title", "用户信息管理");
-    model.addAttribute("summary", "系统用户数据");
-    return "index";
-  }
-
-  @RequestMapping("/getUsers")
-  @ResponseBody
+  @GetMapping("/getUsers")
   @PreAuthorize("authenticated and hasPermission(3, 'query')")
   public Paging getUsers(
       Integer limit,
@@ -89,16 +44,14 @@ public class UserController {
     return userService.getUsers(limit, offset, sortName, sortOrder, username, startTime, endTime);
   }
 
-  @RequestMapping("/getUser")
-  @ResponseBody
+  @GetMapping("/getUser")
   public User getUser(@RequestBody com.cloud.console.vo.User params) {
     User user = userService.getUser(params);
     user.setPassword(null);
     return user;
   }
 
-  @RequestMapping("getUserRoles")
-  @ResponseBody
+  @GetMapping("getUserRoles")
   public List<UserRole> getUserRoles(String param) {
     return userService.getUserRoles(param);
   }
@@ -136,10 +89,9 @@ public class UserController {
     return result;
   }
 
-  @RequestMapping("/edit")
-  @ResponseBody
+  @PatchMapping("/update")
   @PreAuthorize("authenticated and hasPermission(3, 'update')")
-  public Integer edit(@RequestBody User user) throws Exception {
+  public Integer edit(User user) throws Exception {
     if (user != null && StringUtils.isNotBlank(user.getUsername())) {
       userService.updateUser(user);
     }
@@ -147,8 +99,7 @@ public class UserController {
     return 1;
   }
 
-  @RequestMapping("/del")
-  @ResponseBody
+  @DeleteMapping("/del")
   @PreAuthorize("authenticated and hasPermission(3, 'del')")
   public Integer del(@RequestBody List<User> users) throws Exception {
     userService.delUser(users);
@@ -156,8 +107,7 @@ public class UserController {
     return 1;
   }
 
-  @RequestMapping("/auth")
-  @ResponseBody
+  @PostMapping("/author")
   @PreAuthorize("authenticated and hasPermission(3, 'auth')")
   public Integer auth(Long userId, String roles) throws Exception {
     userService.auth(userId, roles);
@@ -165,8 +115,7 @@ public class UserController {
     return 1;
   }
 
-  @RequestMapping("/uploadImg")
-  @ResponseBody
+  @PostMapping("/uploadImg")
   public Integer uploadImg(HttpServletRequest request) throws Exception {
     MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
     MultipartFile multipartFile = null;

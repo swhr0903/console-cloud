@@ -51,6 +51,21 @@ zuul:
       serviceId: console-user
       sensitiveHeaders:
   ignore-security-headers: false
+  host:
+    connect-timeout-millis: 60000
+    socket-timeout-millis: 60000
+    max-total-connections: 10000
+    max-per-route-connections: 50
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 11000
+ribbon:
+  ConnectTimeout: 10000
+  ReadTimeout: 10000
 management:
   endpoints:
     web:

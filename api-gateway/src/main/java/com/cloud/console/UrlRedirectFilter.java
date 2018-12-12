@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /** Created by Frank on 2018-12-10. */
-@Component
+//@Component
 public class UrlRedirectFilter extends ZuulFilter {
 
   private static Map<String, String> urlMap = new HashMap<>();

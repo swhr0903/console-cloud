@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.net.URLDecoder;
 
 /** Created by Frank on 2017/8/11. JWT过滤器验证，验证除例外所有请求 */
-public class JWTAuthenticationFilter extends GenericFilterBean {
+public class  JWTAuthenticationFilter extends GenericFilterBean {
 
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)

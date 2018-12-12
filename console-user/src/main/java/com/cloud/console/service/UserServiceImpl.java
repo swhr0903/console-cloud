@@ -1,5 +1,6 @@
 package com.cloud.console.service;
 
+import com.cloud.console.mapper.SecurityMapper;
 import com.cloud.console.mapper.UserMapper;
 import com.cloud.console.po.User;
 import com.cloud.console.vo.UserRole;
@@ -24,7 +25,8 @@ import java.util.*;
 public class UserServiceImpl implements UserService {
 
   @Autowired RedisTemplate redisTemplate;
-  @Autowired UserMapper userMapper;
+  @Autowired
+  UserMapper userMapper;
 
   @Override
   public Paging getUsers(
