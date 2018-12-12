@@ -45,7 +45,7 @@ public class UserController {
   }
 
   @GetMapping("/getUser")
-  public User getUser(@RequestBody com.cloud.console.vo.User params) {
+  public User getUser(com.cloud.console.vo.User params) {
     User user = userService.getUser(params);
     user.setPassword(null);
     return user;
@@ -126,7 +126,8 @@ public class UserController {
     }
     String userName =
         (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    String filePath = this.getClass().getResource("/").getPath() + "static/avatars/";
+    //String filePath = this.getClass().getResource("/").getPath() + "avatars/";
+    String filePath="avatars/";
     userService.saveImg(filePath, userName, multipartFile);
     return 1;
   }

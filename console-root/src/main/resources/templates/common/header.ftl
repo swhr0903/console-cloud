@@ -200,13 +200,12 @@
         $('#configModal').modal('show');
     });
     $('#configModal').on('show.bs.modal', function (e) {
-        var params = JSON.stringify({
+        var params = {
             "username": '${user}',
-        });
+        };
         $.ajax({
             url: '/user/getUser',
-            type: "post",
-            contentType: 'application/json',
+            type: "get",
             data: params,
             dataType: 'json',
             success: function (data) {
@@ -313,9 +312,8 @@
             "email": $('#emailConfig').val()
         });
         $.ajax({
-            url: '/user/edit',
-            type: "post",
-            contentType: 'application/json',
+            url: '/user/update',
+            type: "patch",
             data: params,
             success: function (data) {
                 if (data == '1') {
