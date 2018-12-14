@@ -24,6 +24,7 @@ import java.util.Map;
 
 /** Created by Frank on 2017/8/8. */
 @RestController
+@RequestMapping("/user")
 @Slf4j(topic = "app")
 public class UserController {
 
@@ -126,8 +127,8 @@ public class UserController {
     }
     String userName =
         (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    //String filePath = this.getClass().getResource("/").getPath() + "avatars/";
-    String filePath="avatars/";
+    // String filePath = this.getClass().getResource("/").getPath() + "avatars/";
+    String filePath = "avatars/";
     userService.saveImg(filePath, userName, multipartFile);
     return 1;
   }

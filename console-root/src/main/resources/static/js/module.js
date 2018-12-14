@@ -8,6 +8,8 @@ $(function () {
     editInit.Init();
     var delInit = new DelInit();
     delInit.Init();
+    var exprotInit = new ExportInit();
+    exprotInit.Init();
     $('#btn_edit').click(function () {
         var selects = $('#tb_modules').bootstrapTable('getSelections');
         if (selects.length != 1) {
@@ -23,18 +25,19 @@ $(function () {
         $('#id').val(null);
         $('#editForm').data('bootstrapValidator').resetForm(true);
     });
-    $('#editModal').on('show.bs.modal', function (e) {
+    $('#editModal').on('show.bs.modal', function () {
         //初始化表单
         var selects = $('#tb_modules').bootstrapTable('getSelections');
-        if (selects) {
+        var moduleName;
+        if (selects && selects.length > 0) {
+            moduleName = selects[0].name;
             var data = JSON.parse(JSON.stringify(selects));
             $('#editForm').setForm(data);
         }
-        var moduleName = selects[0].name;
         //初始化功能项
         $.ajax({
             type: 'get',
-            url: '/module/getOptions',
+            url: '/manage/module/getOptions',
             data: {"moduleName": moduleName},
             success: function (data) {
                 var options = '';
@@ -84,13 +87,12 @@ $(function () {
         }
     });
     $('#mName').change(function () {
-        var params = JSON.stringify({
+        var params = {
             "name": $('#mName').val(),
-        });
+        };
         $.ajax({
-            url: '/module/isExist',
-            type: "post",
-            contentType: 'application/json',
+            url: '/manage/module/isExist',
+            type: "get",
             dataType: "json",
             data: params,
             success: function (result) {
@@ -107,7 +109,7 @@ $(function () {
     });
     $.ajax({
         type: 'get',
-        url: '/module/getModules',
+        url: '/manage/module/getModules',
         success: function (data) {
             var options = '';
             $.each(data, function (index, value) {
@@ -126,7 +128,7 @@ var TableInit = function () {
     //初始化Table
     oTableInit.Init = function () {
         $('#tb_modules').bootstrapTable({
-            url: '/module/getModulesPaging',
+            url: '/manage/module/getModulesPaging',
             method: 'get',
             toolbar: '#toolbar',
             idField: 'id',
@@ -187,6 +189,15 @@ var TableInit = function () {
 
     //得到查询的参数
     oTableInit.queryParams = function (params) {
+        /*var limit;
+        var that = this,
+            $btnGroup = this.$toolbar.find('>.btn-group'),
+            $export = $btnGroup.find('div.export');
+        if (exportDataType == 'all') {
+            limit = null;
+        } else {
+            params.limit - 1;
+        }*/
         var temp = {
             limit: params.limit - 1,
             offset: params.offset,
@@ -201,7 +212,7 @@ var QueryInit = function () {
     var oInit = new Object();
     oInit.Init = function () {
         $('#query').click(function () {
-            $('#tb_modules').bootstrapTable('refresh', {url: '/module/getModulesPaging'});
+            $('#tb_modules').bootstrapTable('refresh', {url: '/manage/module/getModulesPaging'});
         });
         $(document).keydown(function (event) {
             if (event.keyCode == 13) {
@@ -225,29 +236,30 @@ var EditInit = function () {
                     options += ",";
                 }
             });
-            var params = JSON.stringify({
+            var params = {
                 'id': id,
                 'name': $('#mName').val(),
                 'url': $('#mUrl').val(),
                 'parent_id': $('#parent').val(),
                 'options': options,
                 'status': $('#status').val()
-            });
-            var url;
+            };
+            var url, httpType;
             if (id != undefined && id != '') {
-                url = '/module/edit'
+                httpType = 'patch';
+                url = '/manage/module/update'
             } else {
-                url = '/module/add'
+                httpType = 'post';
+                url = '/manage/module/add'
             }
             $.ajax({
                 url: url,
-                type: 'post',
-                contentType: 'application/json',
+                type: httpType,
                 data: params,
                 success: function (data) {
                     if (data == '1') {
                         $('#editModal').modal('hide');
-                        $('#tb_modules').bootstrapTable('refresh', {url: '/module/getModulesPaging'});
+                        $('#tb_modules').bootstrapTable('refresh', {url: '/manage/module/getModulesPaging'});
                     }
                 },
                 error: function () {
@@ -276,6 +288,40 @@ var DelInit = function () {
     return oInit;
 };
 
+var ExportInit = function () {
+    var eInit = new Object();
+    eInit.Init = function () {
+        $('#btn_export').click(function () {
+            var colArray = [];
+            var colObj = {};
+            $("table thead tr th").each(function () {
+                var colCode = $(this).attr('data-field');
+                var colName = this.innerText.replace('\n', '');
+                if (colName != undefined && colName != '' && colArray.indexOf(colName) <= 0) {
+                    colArray.push(colName);
+                    colObj[colCode] = colName;
+                }
+            });
+            $.ajax({
+                url: '/manage/module/export',
+                type: 'get',
+                data: colObj,
+                success: function (result) {
+                    if (result.code == '1') {
+                        window.location.href = result.msg;
+                    } else {
+                        $('#warnModal').find('.modal-body').text('导出异常：' + result.msg);
+                        $('#warnModal').modal('show');
+                    }
+                },
+                error: function () {
+                    $('#errorEditTip').html("您没有此操作权限");
+                }
+            });
+        });
+    }
+    return eInit;
+};
 
 function del() {
     var selects = $('#tb_modules').bootstrapTable('getSelections');
@@ -284,13 +330,13 @@ function del() {
     }
     var params = JSON.stringify(selects);
     $.ajax({
-        url: '/module/del',
-        type: 'post',
-        contentType: 'application/json',
+        url: '/manage/module/del',
+        type: 'delete',
+        contentType: 'application/json;charset=utf-8',
         data: params,
         success: function (data) {
             if (data == '1') {
-                $('#tb_modules').bootstrapTable('refresh', {url: '/module/getModulesPaging'});
+                $('#tb_modules').bootstrapTable('refresh', {url: '/manage/module/getModulesPaging'});
             } else {
                 $('#warnModal').find('.modal-body').text('删除失败，请联系管理员');
                 $('#warnModal').modal('show');

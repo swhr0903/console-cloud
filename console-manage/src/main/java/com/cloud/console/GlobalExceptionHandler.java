@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,9 +13,10 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(value = Exception.class)
   @ResponseBody
-  public Map<String, String> defaultErrorHandler(HttpServletRequest req, Exception e) {
-    Map<String, String> result = new HashMap<>();
-    result.put("0", e.getMessage());
+  public Map<String, Object> defaultErrorHandler(Exception e) {
+    Map<String, Object> result = new HashMap<>();
+    result.put("code", 0);
+    result.put("msg", e.getMessage());
     return result;
   }
 }

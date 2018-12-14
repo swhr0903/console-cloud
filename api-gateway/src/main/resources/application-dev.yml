@@ -46,9 +46,9 @@ eureka:
       defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@eureka-server0:8011/eureka/
 zuul:
   routes:
-    user:
-      path: /user/**
-      serviceId: console-user
+    manage:
+      path: /manage/**
+      serviceId: console-manage
       sensitiveHeaders:
   ignore-security-headers: false
   host:
@@ -56,16 +56,6 @@ zuul:
     socket-timeout-millis: 60000
     max-total-connections: 10000
     max-per-route-connections: 50
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 11000
-ribbon:
-  ConnectTimeout: 10000
-  ReadTimeout: 10000
 management:
   endpoints:
     web:

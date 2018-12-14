@@ -63,7 +63,7 @@ $(function () {
         });
         //设置勾选已有权限
         $.ajax({
-            url: '/role/getRoleAuths',
+            url: '/manage/role/getRoleAuths',
             type: 'get',
             dataType: 'json',
             data: {'roleId': roleId},
@@ -100,16 +100,16 @@ $(function () {
                 permissions: checkedDatas
             });
             $.ajax({
-                url: '/role/auth',
+                url: '/manage/role/auth',
                 type: 'post',
-                contentType: 'application/json',
+                contentType: 'application/json;charset=utf-8',
                 dataType: 'json',
                 data: params,
                 success: function (result) {
-                    if (result == '1') {
-                        $('#errorAuthTip').html("授权成功");
+                    if (result.code == '1') {
+                        $('#errorAuthTip').html(result.msg);
                     } else {
-                        $('#errorAuthTip').html("授权失败，请联系管理员");
+                        $('#errorAuthTip').html("授权异常：" + result.msg);
                     }
                     $('#warnModal').modal('show');
                 }, error: function () {
@@ -146,13 +146,12 @@ $(function () {
         }
     });
     $('#rCode').change(function () {
-        var params = JSON.stringify({
+        var params = {
             "code": $('#rCode').val(),
-        });
+        };
         $.ajax({
-            url: '/role/isExist',
-            type: 'post',
-            contentType: 'application/json',
+            url: '/manage/role/isExist',
+            type: 'get',
             dataType: 'json',
             data: params,
             success: function (result) {
@@ -169,7 +168,7 @@ $(function () {
     });
     $.ajax({
         type: 'get',
-        url: '/role/getRoles',
+        url: '/manage/role/getRoles',
         success: function (data) {
             var options = '';
             $.each(data, function (index, value) {
@@ -188,7 +187,7 @@ var TableInit = function () {
     //初始化Table
     oTableInit.Init = function () {
         $('#tb_roles').bootstrapTable({
-            url: '/role/getRolesPaging',
+            url: '/manage/role/getRolesPaging',
             method: 'get',
             toolbar: '#toolbar',
             idField: 'id',
@@ -251,7 +250,7 @@ var QueryInit = function () {
     var oInit = new Object();
     oInit.Init = function () {
         $('#query').click(function () {
-            $('#tb_roles').bootstrapTable('refresh', {url: '/role/getRolesPaging'});
+            $('#tb_roles').bootstrapTable('refresh', {url: '/manage/role/getRolesPaging'});
         });
         $(document).keydown(function (event) {
             if (event.keyCode == 13) {
@@ -267,27 +266,28 @@ var EditInit = function () {
     oInit.Init = function () {
         $('#edit').click(function () {
             var id = $('#id').val();
-            var params = JSON.stringify({
+            var params = {
                 'id': id,
                 'code': $('#rCode').val(),
                 'name': $('#rName').val(),
                 'status': $('#rStatus').val()
-            });
-            var url;
+            };
+            var url, type;
             if (id != undefined && id != '') {
-                url = '/role/edit'
+                url = '/manage/role/update'
+                type = 'patch';
             } else {
-                url = '/role/add'
+                url = '/manage/role/add'
+                type = 'post';
             }
             $.ajax({
                 url: url,
-                type: 'post',
-                contentType: 'application/json',
+                type: type,
                 data: params,
                 success: function (data) {
                     if (data == '1') {
                         $('#editModal').modal('hide');
-                        $('#tb_roles').bootstrapTable('refresh', {url: '/role/getRolesPaging'});
+                        $('#tb_roles').bootstrapTable('refresh', {url: '/manage/role/getRolesPaging'});
                     }
                 },
                 error: function () {
@@ -323,13 +323,13 @@ function del() {
     }
     var params = JSON.stringify(selects);
     $.ajax({
-        url: '/role/del',
-        type: 'post',
-        contentType: 'application/json',
+        url: '/manage/role/del',
+        type: 'delete',
+        contentType: 'application/json;charset=utf-8',
         data: params,
         success: function (data) {
             if (data == '1') {
-                $('#tb_roles').bootstrapTable('refresh', {url: '/role/getRolesPaging'});
+                $('#tb_roles').bootstrapTable('refresh', {url: '/manage/role/getRolesPaging'});
             } else {
                 $('#warnModal').find('.modal-body').text('删除失败，请联系管理员');
                 $('#warnModal').modal('show');
@@ -346,10 +346,9 @@ function del() {
 function getModules() {
     var modules = '';
     $.ajax({
-        url: '/module/buildTree',
+        url: '/manage/module/buildTree',
         type: 'get',
         async: false,
-        contentType: 'application/json',
         success: function (data) {
             modules = data;
         }

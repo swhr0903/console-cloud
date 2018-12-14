@@ -4,4 +4,6 @@ package com.cloud.console.common;
 public class Constant {
   public static final String TOKEN_HEADER_STRING = "Authorization";
   public static final int TOKEN_EXPIRATION_TIME = 3000;
+
+  public static final String CSV_DIR_NAME="csv";
 }

@@ -18,12 +18,12 @@ public interface ModuleMapper {
           + "t_module a left join t_module b on a.parent_id=b.id "
           + "<if test=\"_parameter!=null\">limit #{_parameter.offset},#{_parameter.limit}</if>"
           + "</script>")
-  List<Module> getModules(Map<String, Integer> params);
+  List<com.cloud.console.vo.Module> getModules(Map<String, Integer> params);
 
   @Select(
       "select a.id,a.name,a.url,b.name as parent,a.is_leaf,a.options,a.status from t_module a "
           + "inner join t_module b on a.parent_id=b.id where a.name like concat('%',#{name},'%')")
-  List<Module> getModuleByName(String name);
+  List<com.cloud.console.vo.Module> getModuleByName(String name);
 
   @Select(
       "<script>"

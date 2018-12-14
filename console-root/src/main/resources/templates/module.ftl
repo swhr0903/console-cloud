@@ -23,7 +23,7 @@
             <ul class="dropdown-menu" aria-labelledby="dataDomain">
                 <li><a href="javascript:selDomain('basic','当前数据');">当前数据</a></li>
                 <li><a href="javascript:selDomain('selected','选中数据');">选中数据</a></li>
-                <li><a href="javascript:selDomain('all','全部数据');">全部数据</a></li>
+                <#--<li><a href="javascript:selDomain('all','全部数据');">全部数据</a></li>-->
             </ul>
             <button id="btn_add" type="button" class="btn btn-default">
                 <span class="glyphicon glyphicon-plus"></span>新增
@@ -33,6 +33,9 @@
             </button>
             <button id="btn_delete" type="button" class="btn btn-default">
                 <span class="glyphicon glyphicon-remove"></span>删除
+            </button>
+            <button id="btn_export" type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-export"></span>导出所有
             </button>
         </div>
         <table id="tb_modules"></table>

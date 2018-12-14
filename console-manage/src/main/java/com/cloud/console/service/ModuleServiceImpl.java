@@ -20,7 +20,7 @@ public class ModuleServiceImpl implements ModuleService {
 
   @Override
   public Paging getModules(Integer limit, Integer offset, String name) {
-    List<Module> modules = null;
+    List<com.cloud.console.vo.Module> modules = null;
     if (StringUtils.isNotBlank(name)) {
       modules = moduleMapper.getModuleByName(name);
     } else if (limit == null && offset == null && StringUtils.isBlank(name)) {
@@ -40,7 +40,7 @@ public class ModuleServiceImpl implements ModuleService {
   }
 
   @Override
-  public List<Module> getModuleByName(String name) {
+  public List<com.cloud.console.vo.Module> getModuleByName(String name) {
     return moduleMapper.getModuleByName(name);
   }
 

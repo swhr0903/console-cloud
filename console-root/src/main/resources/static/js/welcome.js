@@ -1,14 +1,14 @@
 $(function () {
     $.ajax({
         type: 'get',
-        url: '/user/regiUserCount7',
+        url: '/manage/regiUserCount7',
         success: function (data) {
             regiStat(data);
         }
     });
     $.ajax({
         type: 'get',
-        url: '/user/depositWCount7',
+        url: '/manage/depositWCount7',
         success: function (data) {
             depositWStat(data);
         }

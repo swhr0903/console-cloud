@@ -1,6 +1,7 @@
 package com.cloud.console.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.cloud.console.common.ExportUtils;
 import com.cloud.console.po.Module;
 import com.cloud.console.po.User;
 import com.cloud.console.service.IndexService;
@@ -14,22 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /** Created by Frank on 2017/8/3. */
-@Controller
-@RequestMapping(value = "/user/module")
+@RestController
+@RequestMapping("/module")
 @Slf4j(topic = "app")
 public class ModuleController {
 
@@ -37,80 +31,36 @@ public class ModuleController {
   @Autowired ModuleService moduleService;
   @Autowired IndexService indexService;
 
-  @RequestMapping(value = "/all")
-  @PreAuthorize("authenticated and hasPermission(2, 'all')")
-  public String all(Model model) throws Exception {
-    ValueOperations<String, String> StringOperations = redisTemplate.opsForValue();
-    String menus = StringOperations.get("menus");
-    String userName =
-        (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    if (StringUtils.isBlank(userName)) {
-      return "login";
-    }
-    List<GrantedAuthority> grantedAuthorities =
-        (List<GrantedAuthority>)
-            SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-    StringBuilder roles = new StringBuilder();
-    for (int i = 0; i < grantedAuthorities.size(); i++) {
-      GrantedAuthority grantedAuthority = grantedAuthorities.get(i);
-      roles
-          .append(grantedAuthority.getAuthority().split("_")[1])
-          .append(i < grantedAuthorities.size() - 1 ? "," : "");
-    }
-    if ("admin".equals(userName)) {
-      model.addAttribute("role", "ADMIN");
-    } else {
-      model.addAttribute(
-          "role", StringUtils.isNotBlank(roles.toString()) ? roles.toString() : "NEWBIE");
-    }
-    ValueOperations<String, User> userOperations = redisTemplate.opsForValue();
-    User user = userOperations.get(userName);
-    model.addAttribute("user", userName);
-    model.addAttribute("page", "module.ftl");
-    String avatar = user.getAvatar();
-    if (StringUtils.isNotBlank(avatar)) {
-      model.addAttribute("avatar", avatar);
-    }
-    model.addAttribute("createTime", user.getCreate_time());
-    model.addAttribute("menus", menus);
-    model.addAttribute("title", "模块信息管理");
-    model.addAttribute("summary", "系统模块数据");
-    return "index";
-  }
-
-  @RequestMapping(value = "/isExist")
-  @ResponseBody
-  public Map<String, Object> isExist(@RequestBody Module params) throws Exception {
+  @GetMapping(value = "/isExist")
+  public Map<String, Object> isExist(Module params) throws Exception {
     Map<String, Object> result = new HashMap<>();
-    List<Module> module = moduleService.getModuleByName(params.getName());
-    if (module != null) {
-      result.put("code", 0);
-      result.put("msg", "模块已存在");
-    } else {
+    List<com.cloud.console.vo.Module> modules = moduleService.getModuleByName(params.getName());
+    if (CollectionUtils.isEmpty(modules)) {
       result.put("code", 1);
       result.put("msg", "notExist");
+    } else {
+      result.put("code", 0);
+      result.put("msg", "模块已存在");
     }
     return result;
   }
 
-  @RequestMapping(value = "/getModulesPaging")
-  @ResponseBody
+  @GetMapping(value = "/getModulesPaging")
   @PreAuthorize("authenticated and hasPermission(2, 'query')")
   public Paging getModulesPaging(Integer limit, Integer offset, String name) throws Exception {
     return moduleService.getModules(limit, offset, name);
   }
 
-  @RequestMapping(value = "/getModules")
+  @GetMapping(value = "/getModules")
   @ResponseBody
   public List<Module> getModules() throws Exception {
     Paging paging = moduleService.getModules(null, null, null);
     return paging.getRows();
   }
 
-  @RequestMapping(value = "/add")
-  @ResponseBody
+  @PostMapping(value = "/add")
   @PreAuthorize("authenticated and hasPermission(2, 'add')")
-  public Integer add(@RequestBody Module module) throws Exception {
+  public Integer add(Module module) throws Exception {
     Long parentId = module.getParent_id();
     if (parentId != null && parentId > 0) {
       module.setIs_leaf(1);
@@ -121,10 +71,9 @@ public class ModuleController {
     return 1;
   }
 
-  @RequestMapping(value = "/edit")
-  @ResponseBody
+  @PatchMapping(value = "/update")
   @PreAuthorize("authenticated and hasPermission(2, 'update')")
-  public Integer edit(@RequestBody Module module) throws Exception {
+  public Integer edit(Module module) throws Exception {
     Long parentId = module.getParent_id();
     if (parentId != null && parentId > 0) {
       module.setIs_leaf(1);
@@ -135,8 +84,7 @@ public class ModuleController {
     return 1;
   }
 
-  @RequestMapping(value = "/del")
-  @ResponseBody
+  @DeleteMapping(value = "/del")
   @PreAuthorize("authenticated and hasPermission(2, 'del')")
   public Integer del(@RequestBody List<Module> modules) throws Exception {
     moduleService.delModule(modules);
@@ -145,8 +93,19 @@ public class ModuleController {
     return 1;
   }
 
-  @RequestMapping(value = "/buildTree")
-  @ResponseBody
+  @GetMapping(value = "/export")
+  public Map<String, Object> export(@RequestParam LinkedHashMap<String, String> header)
+      throws Exception {
+    Map<String, Object> result = new HashMap<>();
+    List<com.cloud.console.vo.Module> modules =
+        moduleService.getModules(null, null, null).getRows();
+    String fileUrl = ExportUtils.export("模块管理", header, modules);
+    result.put("code", 1);
+    result.put("msg", fileUrl);
+    return result;
+  }
+
+  @GetMapping(value = "/buildTree")
   public List<TreeNode> buildTree() throws Exception {
     List<TreeNode> trees = new ArrayList<>();
     TreeNode tree = moduleService.buildTree();
@@ -154,11 +113,10 @@ public class ModuleController {
     return trees;
   }
 
-  @RequestMapping(value = "/getOptions")
-  @ResponseBody
+  @GetMapping(value = "/getOptions")
   public Map<String, Object> getOptions(String moduleName) throws Exception {
     Map<String, Object> oMap = new HashMap<>();
-    List<Module> modules;
+    List<com.cloud.console.vo.Module> modules;
     if (StringUtils.isNotBlank(moduleName)) {
       modules = moduleService.getModuleByName(moduleName);
       if (modules.size() > 0) {

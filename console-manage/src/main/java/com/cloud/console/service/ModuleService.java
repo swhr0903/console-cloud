@@ -21,7 +21,7 @@ public interface ModuleService {
    * @param name
    * @return
    */
-  List<Module> getModuleByName(String name) throws Exception;
+  List<com.cloud.console.vo.Module> getModuleByName(String name) throws Exception;
 
   /**
    * 新增模块

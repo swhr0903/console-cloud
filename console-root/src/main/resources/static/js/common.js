@@ -14,7 +14,7 @@ $(function () {
 
     //初始化自定义头像
     var oFileInput = new FileInput();
-    oFileInput.Init('user_img', '/user/uploadImg');
+    oFileInput.Init('user_img', '/manage/user/uploadImg');
 
     //保持菜单状态同步
     $(window).on('beforeunload', function () {

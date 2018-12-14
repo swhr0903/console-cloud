@@ -17,7 +17,10 @@ public class AutoRefeshTokenHandler implements HandlerInterceptor {
     for (int i = 0; cookies != null && i < cookies.length; i++) {
       Cookie cookie = cookies[i];
       if (Constant.TOKEN_HEADER_STRING.equals(cookie.getName())) {
-        cookie.setMaxAge(Constant.TOKEN_EXPIRATION_TIME);
+        Cookie newCookie = new Cookie(Constant.TOKEN_HEADER_STRING, cookie.getValue());
+        newCookie.setMaxAge(Constant.TOKEN_EXPIRATION_TIME);
+        newCookie.setHttpOnly(true);
+        response.addCookie(newCookie);
         break;
       }
     }

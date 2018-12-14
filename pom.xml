@@ -13,7 +13,7 @@
         <module>eureka-consumer-feign</module>
         <module>console-root</module>
         <module>console-security</module>
-        <module>console-user</module>
+        <module>console-manage</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -129,6 +129,11 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>4.0</version>
         </dependency>
     </dependencies>
     <build>

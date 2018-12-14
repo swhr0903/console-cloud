@@ -51,7 +51,7 @@ public class RoleServiceImpl implements RoleService {
 
   @Override
   @Transactional
-  public void auth(Auths auths) throws Exception {
+  public void auth(Auths auths) {
     List<RoleAuth> roleAuths = new ArrayList<>();
     RoleAuth roleAuth;
     StringBuilder options;
@@ -70,9 +70,11 @@ public class RoleServiceImpl implements RoleService {
       roleAuths.add(roleAuth);
     }
     RoleAuth params = new RoleAuth();
-    params.setRole_id(roleAuths.get(0).getRole_id());
+    params.setRole_id(auths.getRoleId());
     roleMapper.delRoleAuth(params);
-    roleMapper.batchInsertRoleAuth(roleAuths);
+    if (roleAuths.size() > 0) {
+      roleMapper.batchInsertRoleAuth(roleAuths);
+    }
   }
 
   @Override

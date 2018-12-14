@@ -128,7 +128,7 @@ public class UserServiceImpl implements UserService {
     ValueOperations<String, User> valueOperations = redisTemplate.opsForValue();
     User user = valueOperations.get(userName);
     user.setPassword(null);
-    user.setAvatar("avatars/" + userName + fileName.substring(fileName.lastIndexOf(".")));
+    user.setAvatar("/avatars/" + userName + fileName.substring(fileName.lastIndexOf(".")));
     this.updateUser(user);
   }
 

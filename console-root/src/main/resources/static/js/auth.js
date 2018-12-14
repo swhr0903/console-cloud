@@ -23,7 +23,7 @@ $(function () {
             'confirmPassword': $('#confirmPassword').val()
         };
         $.ajax({
-            url: '/user/register',
+            url: '/manage/user/register',
             data: user,
             type: 'post',
             dataType: "json",
@@ -149,7 +149,7 @@ $(function () {
 
     $('#usernameRegi').change(function () {
         $.ajax({
-            url: '/user/isExist/' + $('#usernameRegi').val(),
+            url: '/manage/user/isExist/' + $('#usernameRegi').val(),
             type: "get",
             contentType: 'application/json',
             dataType: "json",

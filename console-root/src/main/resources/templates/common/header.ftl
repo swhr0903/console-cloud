@@ -204,7 +204,7 @@
             "username": '${user}',
         };
         $.ajax({
-            url: '/user/getUser',
+            url: '/manage/user/getUser',
             type: "get",
             data: params,
             dataType: 'json',
@@ -285,7 +285,7 @@
             "username": $('#usernameConfig').val(),
         });
         $.ajax({
-            url: '/user/isExist',
+            url: '/manage/user/isExist',
             type: "post",
             contentType: 'application/json',
             dataType: "json",
@@ -312,7 +312,7 @@
             "email": $('#emailConfig').val()
         });
         $.ajax({
-            url: '/user/update',
+            url: '/manage/user/update',
             type: "patch",
             data: params,
             success: function (data) {
@@ -332,7 +332,7 @@
     function dwRemind() {
         $.ajax({
             type: 'get',
-            url: '/user/getDWCount',
+            url: '/manage/getDWCount',
             success: function (data) {
                 if (data)
                     $('#dwSpan').html(data.length);

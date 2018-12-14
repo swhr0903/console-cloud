@@ -88,7 +88,7 @@ $(function () {
     //校验用户名唯一
     $('#usernameAdd').change(function () {
         $.ajax({
-            url: '/user/isExist/' + $('#usernameAdd').val(),
+            url: '/manage/user/isExist/' + $('#usernameAdd').val(),
             type: "get",
             dataType: "json",
             success: function (result) {
@@ -107,7 +107,7 @@ $(function () {
     $('#authModal').on('show.bs.modal', function (e) {
         $.ajax({
             type: 'get',
-            url: '/user/role/getRoles',
+            url: '/manage/role/getRoles',
             success: function (data) {
                 var options = '';
                 $.each(data, function (index, value) {
@@ -131,7 +131,7 @@ $(function () {
         var userId = data[0].id;
         $.ajax({
             type: 'get',
-            url: '/user/getUserRoles',
+            url: '/manage/user/getUserRoles',
             dataType: 'json',
             data: {'param': userId},
             success: function (data) {
@@ -160,7 +160,7 @@ $(function () {
         });
         roleStr = roleStr.substring(0, roleStr.length - 1);
         $.ajax({
-            url: '/user/author',
+            url: '/manage/user/author',
             type: 'post',
             dataType: 'json',
             data: {'userId': userId, 'roles': roleStr},
@@ -183,7 +183,7 @@ var TableInit = function () {
     //初始化Table
     oTableInit.Init = function () {
         $('#tb_users').bootstrapTable({
-            url: '/user/getUsers',
+            url: '/manage/user/getUsers',
             method: 'get',
             toolbar: '#toolbar',
             idField: 'id',
@@ -254,7 +254,7 @@ var QueryInit = function () {
     var oInit = new Object();
     oInit.Init = function () {
         $('#query').click(function () {
-            $('#tb_users').bootstrapTable('refresh', {url: '/user/getUsers'});
+            $('#tb_users').bootstrapTable('refresh', {url: '/manage/user/getUsers'});
         });
         $(document).keydown(function (event) {
             if (event.keyCode == 13) {
@@ -276,12 +276,12 @@ var EditInit = function () {
                 'email': $('#email').val()
             };
             $.ajax({
-                url: '/user/update',
+                url: '/manage/user/update',
                 type: 'patch',
                 data: params,
                 success: function (data) {
                     if (data == '1') {
-                        $('#tb_users').bootstrapTable('refresh', {url: '/user/getUsers'});
+                        $('#tb_users').bootstrapTable('refresh', {url: '/manage/user/getUsers'});
                     }
                 },
                 error: function () {
@@ -318,13 +318,13 @@ function del() {
     }
     var params = JSON.stringify(selects);
     $.ajax({
-        url: '/user/del',
+        url: '/manage/user/del',
         type: 'delete',
         contentType : 'application/json;charset=utf-8',
         data: params,
         success: function (data) {
             if (data == '1') {
-                $('#tb_users').bootstrapTable('refresh', {url: '/user/getUsers'});
+                $('#tb_users').bootstrapTable('refresh', {url: '/manage/user/getUsers'});
             } else {
                 $('#warnModal').find('.modal-body').text('删除失败，请联系管理');
                 $('#warnModal').modal('show');
