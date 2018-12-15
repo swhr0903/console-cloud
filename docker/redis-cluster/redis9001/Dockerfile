@@ -16,8 +16,8 @@ RUN apk add --no-cache \
 # add tzdata for https://github.com/docker-library/redis/issues/138
 		tzdata
 
-ENV REDIS_VERSION 5.0.0
-ENV REDIS_DOWNLOAD_URL http://download.redis.io/releases/redis-5.0.0.tar.gz
+ENV REDIS_VERSION 5.0.3
+ENV REDIS_DOWNLOAD_URL http://download.redis.io/releases/redis-${REDIS_VERSION}.tar.gz
 ENV REDIS_DOWNLOAD_SHA 70c98b2d0640b2b73c9d8adb4df63bcb62bad34b788fe46d1634b6cf87dc99a4
 
 # for redis-sentinel see: http://redis.io/topics/sentinel
@@ -70,7 +70,7 @@ WORKDIR /data
 
 COPY ./conf.d/redis.conf /etc/redis.conf
 
-EXPOSE 6379
+EXPOSE 9001
 
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod 777 /usr/local/bin/docker-entrypoint.sh && ln -s /usr/local/bin/docker-entrypoint.sh 

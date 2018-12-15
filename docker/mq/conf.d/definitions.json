@@ -1,0 +1,46 @@
+{
+  "rabbit_version": "3.7.8",
+  "users": [
+    {
+      "name": "admin",
+      "password_hash": "FC1PjqQ4ruIZMkuha065T/jWzATGe9WvqcEC1h4LaCK+chSN",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": "administrator"
+    },
+    {
+      "name": "qq",
+      "password_hash": "nnFv8ZftmBQJbUNTA4QJ/O5Y+kaagtJsxLMBoVCDOtbwt13E",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": "management"
+    }
+  ],
+  "vhosts": [
+    {
+      "name": "\/"
+    },
+    {
+      "name": "\/qq"
+    }
+  ],
+  "permissions": [
+    {
+      "user": "admin",
+      "vhost": "\/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    },
+    {
+      "user": "qq",
+      "vhost": "\/qq",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+  "parameters": [],
+  "policies": [],
+  "queues": [],
+  "exchanges": [],
+  "bindings": []
+}
