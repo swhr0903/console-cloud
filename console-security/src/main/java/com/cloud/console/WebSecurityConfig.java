@@ -29,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/static/**",
             "/favicon.ico",
             "/register",
-            "/**/isExist/**",
+            "/user/isExist/**",
             "/actuator/**",
             "/forgetPwd",
             "/getBackPwd",

@@ -1,0 +1,102 @@
+version: '3.3'
+services:
+  redis9001:
+    image: 192.168.1.102:5000/console/redis:5.0.3
+    hostname: redis9001
+    volumes:
+      - /home/logs/redis9001:/logs
+      - /data/redis9001:/data
+    networks:
+      - console-net
+    command: ["/etc/redis.conf"]
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        preferences:
+          - spread: node.labels.work
+  redis9002:
+    image: 192.168.1.102:5000/console/redis:5.0.3
+    hostname: redis9002
+    volumes:
+      - /home/logs/redis9002:/logs
+      - /data/redis9002:/data
+    networks:
+      - console-net
+    command: ["/etc/redis.conf"]
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        preferences:
+          - spread: node.labels.work
+  redis9003:
+    image: 192.168.1.102:5000/console/redis:5.0.3
+    hostname: redis9003
+    volumes:
+      - /home/logs/redis9003:/logs
+      - /data/redis9003:/data
+    networks:
+      - console-net
+    command: ["/etc/redis.conf"]
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        preferences:
+          - spread: node.labels.work
+  redis9004:
+    image: 192.168.1.102:5000/console/redis:5.0.3
+    hostname: redis9004
+    volumes:
+      - /home/logs/redis9004:/logs
+      - /data/redis9004:/data
+    networks:
+      - console-net
+    command: ["/etc/redis.conf"]
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        preferences:
+          - spread: node.labels.work
+  redis9005:
+    image: 192.168.1.102:5000/console/redis:5.0.3
+    container_name: redis_cluster_redis9005
+    hostname: redis9005
+    volumes:
+      - /home/logs/redis9005:/logs
+      - /data/redis9005:/data
+    networks:
+      - console-net
+    command: ["/etc/redis.conf"]
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        preferences:
+          - spread: node.labels.work
+  redis9006:
+    image: 192.168.1.102:5000/console/redis:5.0.3
+    hostname: redis9001
+    volumes:
+      - /home/logs/redis9006:/logs
+      - /data/redis9006:/data
+    networks:
+      - console-net
+    command: ["/etc/redis.conf"]
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        preferences:
+          - spread: node.labels.work
+networks:
+  console-net:
+    external: true

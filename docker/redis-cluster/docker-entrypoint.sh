@@ -15,5 +15,4 @@ fi
 
 exec "$@"
 
-
-chmod 777 -R /logs
+chmod 777 /logs/redis.log

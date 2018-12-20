@@ -1,11 +1,11 @@
 spring:
   application:
-    name: eureka-server
+    name: eurekaServer
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration,
       org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration,
       com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
-    #org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+      #org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
   security:
     user:
       name: frank
@@ -17,5 +17,5 @@ eureka:
     hostname: ${spring.application.name}
     instance-id: ${spring.application.name}:${server.port}
   client:
-    register-with-eureka: false
-    fetch-registry: false
+    registerWithEureka: false
+    fetchRegistry: false

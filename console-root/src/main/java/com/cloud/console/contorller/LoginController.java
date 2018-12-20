@@ -162,12 +162,20 @@ public class LoginController {
     long t = System.currentTimeMillis();
     GoogleAuthenticator ga = new GoogleAuthenticator();
     ga.setWindowSize(5);
-    boolean isAuth = ga.check_code(user.getMfa_secret(), authCode, t);
-    if (isAuth) {
-      redisTemplate.opsForValue().set(userName + "-secondAuth", "1", 36000, TimeUnit.SECONDS);
-      result.put("1", "认证成功！");
+    String userMfaSecret = user.getMfa_secret();
+    if (StringUtils.isBlank(userMfaSecret)) {
+      result.put("code", "0");
+      result.put("msg", "您还未开通二次验证，请在登陆页点击相关链接开通验证");
     } else {
-      result.put("0", "验证码错误！");
+      boolean isAuth = ga.check_code(userMfaSecret, authCode, t);
+      if (isAuth) {
+        redisTemplate.opsForValue().set(userName + "-secondAuth", "1", 36000, TimeUnit.SECONDS);
+        result.put("code", "1");
+        result.put("msg", "认证成功");
+      } else {
+        result.put("code", "0");
+        result.put("msg", "验证码错误");
+      }
     }
     return result;
   }

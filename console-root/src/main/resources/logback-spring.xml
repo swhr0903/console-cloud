@@ -74,8 +74,18 @@
         </root>
     </springProfile>
 
-    <!--开发环境:打印控制台-->
+    <!--开发、测试、生产环境:打印控制台-->
     <springProfile name="dev">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+    <springProfile name="test">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+    <springProfile name="prod">
         <root level="INFO">
             <appender-ref ref="CONSOLE"/>
         </root>

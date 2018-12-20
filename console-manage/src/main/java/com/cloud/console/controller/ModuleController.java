@@ -1,6 +1,7 @@
 package com.cloud.console.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.cloud.console.Result;
 import com.cloud.console.common.ExportUtils;
 import com.cloud.console.po.Module;
 import com.cloud.console.po.User;
@@ -24,7 +25,7 @@ import java.util.*;
 /** Created by Frank on 2017/8/3. */
 @RestController
 @RequestMapping("/module")
-@Slf4j(topic = "app")
+@Slf4j(topic = "manage")
 public class ModuleController {
 
   @Autowired RedisTemplate redisTemplate;
@@ -32,15 +33,15 @@ public class ModuleController {
   @Autowired IndexService indexService;
 
   @GetMapping(value = "/isExist")
-  public Map<String, Object> isExist(Module params) throws Exception {
-    Map<String, Object> result = new HashMap<>();
+  public Result isExist(Module params) throws Exception {
+    Result result = new Result();
     List<com.cloud.console.vo.Module> modules = moduleService.getModuleByName(params.getName());
     if (CollectionUtils.isEmpty(modules)) {
-      result.put("code", 1);
-      result.put("msg", "notExist");
+      result.setCode("1");
+      result.setMsg("notExist");
     } else {
-      result.put("code", 0);
-      result.put("msg", "模块已存在");
+      result.setCode("0");
+      result.setMsg("模块已存在");
     }
     return result;
   }
@@ -60,7 +61,8 @@ public class ModuleController {
 
   @PostMapping(value = "/add")
   @PreAuthorize("authenticated and hasPermission(2, 'add')")
-  public Integer add(Module module) throws Exception {
+  public Result add(Module module) throws Exception {
+    Result result = new Result();
     Long parentId = module.getParent_id();
     if (parentId != null && parentId > 0) {
       module.setIs_leaf(1);
@@ -68,12 +70,15 @@ public class ModuleController {
     moduleService.addModule(module);
     redisTemplate.opsForValue().set("menus", indexService.builderMenus());
     this.log("编辑模块" + JSON.toJSONString(module));
-    return 1;
+    result.setCode("1");
+    result.setCode("新增成功");
+    return result;
   }
 
   @PatchMapping(value = "/update")
   @PreAuthorize("authenticated and hasPermission(2, 'update')")
-  public Integer edit(Module module) throws Exception {
+  public Result edit(Module module) throws Exception {
+    Result result = new Result();
     Long parentId = module.getParent_id();
     if (parentId != null && parentId > 0) {
       module.setIs_leaf(1);
@@ -81,27 +86,31 @@ public class ModuleController {
     moduleService.updateModule(module);
     redisTemplate.opsForValue().set("menus", indexService.builderMenus());
     this.log("编辑模块" + JSON.toJSONString(module));
-    return 1;
+    result.setCode("1");
+    result.setCode("修改成功");
+    return result;
   }
 
   @DeleteMapping(value = "/del")
   @PreAuthorize("authenticated and hasPermission(2, 'del')")
-  public Integer del(@RequestBody List<Module> modules) throws Exception {
+  public Result del(@RequestBody List<Module> modules) throws Exception {
+    Result result = new Result();
     moduleService.delModule(modules);
     redisTemplate.opsForValue().set("menus", indexService.builderMenus());
     this.log("删除模块" + JSON.toJSONString(modules));
-    return 1;
+    result.setCode("1");
+    result.setCode("删除成功");
+    return result;
   }
 
   @GetMapping(value = "/export")
-  public Map<String, Object> export(@RequestParam LinkedHashMap<String, String> header)
-      throws Exception {
-    Map<String, Object> result = new HashMap<>();
+  public Result export(@RequestParam LinkedHashMap<String, String> header) throws Exception {
+    Result result = new Result();
     List<com.cloud.console.vo.Module> modules =
         moduleService.getModules(null, null, null).getRows();
     String fileUrl = ExportUtils.export("模块管理", header, modules);
-    result.put("code", 1);
-    result.put("msg", fileUrl);
+    result.setCode("1");
+    result.setMsg(fileUrl);
     return result;
   }
 
@@ -144,7 +153,7 @@ public class ModuleController {
     return oMap;
   }
 
-  private void log(String text) throws Exception {
+  private void log(String text) {
     String userName =
         (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     ValueOperations<String, User> userOperations = redisTemplate.opsForValue();

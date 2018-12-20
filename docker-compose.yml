@@ -1,10 +1,12 @@
 version: '3.3'
 services:
   nginx:
-    image: 192.168.1.102:5000/middleware/nginx:1.14.0
-    hostname: middleware_nginx
+    image: 192.168.1.102:5000/console/nginx:1.14.0
+    hostname: console_nginx
     volumes:
       - /home/logs/nginx:/usr/local/nginx/logs
+      - vol_csv:/csv
+      - vol_avatar:/avatar
     ports:
       - 80:80
       - 443:443
@@ -15,37 +17,90 @@ services:
       restart_policy:
         condition: on-failure
       placement:
-        constraints:
-          - node.labels.manage == 1
-  redis1:
-    image: 192.168.1.102:5000/middleware/redis:4.0.11
-    hostname: middleware_redis1
+        constraints: [node.labels.work == 2]
+    depends_on:
+      - api-gateway
+      - root
+  eurekaServer:
+    image: 192.168.1.102:5000/console/eureka-server:0.0.1-SNAPSHOT
+    hostname: eureka_server
     volumes:
-      - /home/logs/redis1:/logs
-      - /data/redis/1:/data
+      - /home/logs/eureka-server:/logs
     ports:
-      - 6379:6379
+      - 8011:8011
     networks:
       - console-net
-    command: ["/etc/redis.conf"]
     deploy:
       replicas: 1
       restart_policy:
         condition: on-failure
       placement:
-        constraints:
-          - node.labels.manage == 1
-  app:
-    restart: always
-    build: ./console
-    working_dir: /console
+        constraints: [node.labels.work == 2]
+  api-gateway:
+    image: 192.168.1.102:5000/console/api-gateway:0.0.1-SNAPSHOT
+    hostname: api_gateway
     volumes:
-      - ./console:/console
-      - ~/.m2:/root/.m2
-    expose:
-      - "8080"
+      - /home/logs/api-gateway:/logs
+    networks:
+      - console-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.labels.work == 2]
     depends_on:
-      - nginx
-      #- mysql
-      - redis
-    command: mvn clean spring-boot:run -Dspring-boot.run.profiles=docker
+      - eureka-server
+  root:
+    image: 192.168.1.102:5000/console/root:0.0.1-SNAPSHOT
+    hostname: console_root
+    volumes:
+      - /home/logs/console-root:/logs
+    networks:
+      - console-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.labels.work == 2]
+    depends_on:
+      - api-gateway
+#        preferences:
+#          - spread: node.labels.work
+  manage:
+    image: 192.168.1.102:5000/console/manage:0.0.1-SNAPSHOT
+    hostname: console_manage
+    volumes:
+      - /home/logs/console-manage:/logs
+      - vol_csv:/csv
+      - vol_avatar:/avatar
+    networks:
+      - console-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.labels.work == 2]
+#        preferences:
+#          - spread: node.labels.work
+    depends_on:
+      - eureka-server
+      - api-gateway
+networks:
+  console-net:
+    external: true
+volumes:
+  vol_csv:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=192.168.1.122
+      device: ':/data/csv'
+  vol_avatar:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=192.168.1.122
+      device: ':/data/avatar'

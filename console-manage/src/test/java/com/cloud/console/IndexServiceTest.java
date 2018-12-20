@@ -5,7 +5,6 @@ import com.cloud.console.common.MenuUtils;
 import com.cloud.console.po.Module;
 import com.cloud.console.service.IndexService;
 import com.cloud.console.service.Paging;
-import com.cloud.console.service.SecurityService;
 import com.cloud.console.service.UserService;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -22,12 +21,11 @@ import java.util.Map;
 
 /** Created by Frank on 2017/8/3. */
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = App.class)
 public class IndexServiceTest {
 
   @Autowired IndexService indexService;
-  @Autowired
-  UserService userService;
+  @Autowired UserService userService;
 
   @Test
   public void testGetUsers() throws Exception {

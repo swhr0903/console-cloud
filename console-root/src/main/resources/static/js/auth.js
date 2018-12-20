@@ -28,7 +28,7 @@ $(function () {
             type: 'post',
             dataType: "json",
             success: function (result) {
-                if (result.code == 1) {
+                if (result.code == "1") {
                     $('#regiTip').text(result.msg);
                     $('#username').val($('#usernameRegi').val());
                     $('#password').val($('#passwordRegi').val());
@@ -154,13 +154,13 @@ $(function () {
             contentType: 'application/json',
             dataType: "json",
             success: function (result) {
-                if (result.code == '0') {
-                    $('#existTip2').html('帐号已存在');
-                    $('#usernameRegi').focus();
-                    $('#register').prop('disabled', true);
-                } else {
+                if (result.code == '1') {
                     $('#register').prop('disabled', false);
                     $('#existTip2').html('');
+                } else {
+                    $('#existTip2').html(result.msg);
+                    $('#usernameRegi').focus();
+                    $('#register').prop('disabled', true);
                 }
             }
         });

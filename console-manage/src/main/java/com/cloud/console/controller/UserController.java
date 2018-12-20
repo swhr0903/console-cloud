@@ -1,6 +1,7 @@
 package com.cloud.console.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.cloud.console.Result;
 import com.cloud.console.po.User;
 import com.cloud.console.service.Paging;
 import com.cloud.console.service.UserService;
@@ -17,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +25,7 @@ import java.util.Map;
 /** Created by Frank on 2017/8/8. */
 @RestController
 @RequestMapping("/user")
-@Slf4j(topic = "app")
+@Slf4j(topic = "manage")
 public class UserController {
 
   @Autowired RedisTemplate redisTemplate;
@@ -58,66 +58,76 @@ public class UserController {
   }
 
   @GetMapping(value = "/isExist/{userName}")
-  public Map<String, Object> isExist(@PathVariable String userName) {
+  public Result isExist(@PathVariable String userName) {
     com.cloud.console.vo.User params = new com.cloud.console.vo.User();
     params.setUsername(userName);
-    Map<String, Object> result = new HashMap<>();
     User user = userService.getUser(params);
+    Result result = new Result();
     if (user != null) {
-      result.put("code", 0);
-      result.put("msg", "帐号已存在");
+      result.setCode("0");
+      result.setMsg("帐号已存在");
     } else {
-      result.put("code", 1);
-      result.put("msg", "notExist");
+      result.setCode("1");
+      result.setMsg("notExist");
     }
     return result;
   }
 
   @PostMapping(value = "/register")
-  public Map<String, Object> register(User user) throws Exception {
-    Map<String, Object> result = new HashMap<>();
+  public Result register(User user) throws Exception {
+    Result result = new Result();
     if (user != null
         && StringUtils.isNotBlank(user.getUsername())
         && StringUtils.isNotBlank(user.getPassword())) {
       userService.insertUser(user);
-      result.put("code", 1);
-      result.put("msg", "注册成功");
+      result.setCode("1");
+      result.setMsg("注册成功");
     } else {
-      result.put("code", 1);
-      result.put("msg", "注册失败，用户资料不全");
+      result.setCode("1");
+      result.setMsg("注册失败，用户资料不全");
     }
-    this.log(user.getUsername() + "注册");
+    this.log(user.getUsername() + "注册成功");
     return result;
   }
 
   @PatchMapping("/update")
   @PreAuthorize("authenticated and hasPermission(3, 'update')")
-  public Integer edit(User user) throws Exception {
+  public Result edit(User user) throws Exception {
+    Result result = new Result();
     if (user != null && StringUtils.isNotBlank(user.getUsername())) {
       userService.updateUser(user);
     }
     this.log("编辑用户" + JSON.toJSONString(user));
-    return 1;
+    result.setCode("1");
+    result.setMsg("修改成功");
+    return result;
   }
 
   @DeleteMapping("/del")
   @PreAuthorize("authenticated and hasPermission(3, 'del')")
-  public Integer del(@RequestBody List<User> users) throws Exception {
+  public Result del(@RequestBody List<User> users) throws Exception {
+    Result result = new Result();
     userService.delUser(users);
     this.log("删除用户" + JSON.toJSONString(users));
-    return 1;
+    result.setCode("1");
+    result.setMsg("修改成功");
+    return result;
   }
 
   @PostMapping("/author")
   @PreAuthorize("authenticated and hasPermission(3, 'auth')")
-  public Integer auth(Long userId, String roles) throws Exception {
+  public Result auth(Long userId, String roles) throws Exception {
+    Result result = new Result();
     userService.auth(userId, roles);
     this.log("授予" + userId + "角色" + roles);
-    return 1;
+    result.setCode("1");
+    result.setMsg("授权成功");
+    return result;
   }
 
   @PostMapping("/uploadImg")
-  public Integer uploadImg(HttpServletRequest request) throws Exception {
+  public Result uploadImg(HttpServletRequest request) throws Exception {
+    Result result = new Result();
     MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
     MultipartFile multipartFile = null;
     Map map = multipartRequest.getFileMap();
@@ -127,10 +137,11 @@ public class UserController {
     }
     String userName =
         (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    // String filePath = this.getClass().getResource("/").getPath() + "avatars/";
-    String filePath = "avatars/";
+    String filePath = "avatar/";
     userService.saveImg(filePath, userName, multipartFile);
-    return 1;
+    result.setCode("1");
+    result.setMsg("上传成功");
+    return result;
   }
 
   private void log(String text) {

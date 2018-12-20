@@ -1,0 +1,28 @@
+version: '3'
+services:
+  registry-web:
+    image: hyper/docker-registry-web:latest
+    ports:
+      - 8088:8080
+    volumes:
+      - /data/registry/conf/registry-web:/conf:ro
+      - /data/registry/db:/data
+    networks:
+      - registry-net
+    depends_on:
+      - registry
+    restart: always
+  registry:
+    image: registry:2.4.1
+    ports:
+      - 5000:5000
+    volumes:
+      - /data/registry/conf/registry:/etc/docker/registry:ro
+      - /data/registry:/var/lib/registry
+    environment:
+      - REGISTRY_STORAGE_DELETE_ENABLED=true
+    networks:
+      - registry-net
+    restart: always
+networks:
+  registry-net:

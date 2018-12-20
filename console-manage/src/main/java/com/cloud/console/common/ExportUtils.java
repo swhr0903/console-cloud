@@ -3,6 +3,7 @@ package com.cloud.console.common;
 import org.apache.commons.lang.time.DateFormatUtils;
 
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

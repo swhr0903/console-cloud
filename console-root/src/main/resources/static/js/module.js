@@ -256,10 +256,12 @@ var EditInit = function () {
                 url: url,
                 type: httpType,
                 data: params,
-                success: function (data) {
-                    if (data == '1') {
+                success: function (result) {
+                    if (result.code == '1') {
                         $('#editModal').modal('hide');
                         $('#tb_modules').bootstrapTable('refresh', {url: '/manage/module/getModulesPaging'});
+                    } else {
+                        $('#errorEditTip').html(result.msg);
                     }
                 },
                 error: function () {
@@ -334,11 +336,11 @@ function del() {
         type: 'delete',
         contentType: 'application/json;charset=utf-8',
         data: params,
-        success: function (data) {
-            if (data == '1') {
+        success: function (result) {
+            if (result.code == '1') {
                 $('#tb_modules').bootstrapTable('refresh', {url: '/manage/module/getModulesPaging'});
             } else {
-                $('#warnModal').find('.modal-body').text('删除失败，请联系管理员');
+                $('#warnModal').find('.modal-body').text(result.msg);
                 $('#warnModal').modal('show');
             }
         },

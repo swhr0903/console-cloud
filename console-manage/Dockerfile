@@ -1,7 +1,7 @@
 FROM java:8-jre-alpine
 
-COPY ./target/*.jar console-user.jar
-CMD java -jar -Ddruid.config.decrypt=true console-user.jar
+COPY ./target/*.jar console-manage.jar
+CMD java -jar -Ddruid.config.decrypt=true console-manage.jar
 
 #设置时区
 RUN  echo 'http://mirrors.ustc.edu.cn/alpine/v3.5/main' > /etc/apk/repositories \
@@ -10,4 +10,4 @@ RUN  echo 'http://mirrors.ustc.edu.cn/alpine/v3.5/main' > /etc/apk/repositories 
 && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
 && echo "Asia/Shanghai" > /etc/timezone
 
-EXPOSE 8080
+EXPOSE 8021

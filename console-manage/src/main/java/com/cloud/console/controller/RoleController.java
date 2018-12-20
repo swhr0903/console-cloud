@@ -1,6 +1,7 @@
 package com.cloud.console.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.cloud.console.Result;
 import com.cloud.console.po.Role;
 import com.cloud.console.po.RoleAuth;
 import com.cloud.console.po.User;
@@ -16,14 +17,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /** Created by Frank on 2017/8/3. */
 @RestController
 @RequestMapping(value = "/role")
-@Slf4j(topic = "app")
+@Slf4j(topic = "manage")
 public class RoleController {
 
   @Autowired RedisTemplate redisTemplate;
@@ -31,15 +30,15 @@ public class RoleController {
   @Autowired IndexService indexService;
 
   @GetMapping(value = "/isExist")
-  public Map<String, Object> isExist(Role params) throws Exception {
-    Map<String, Object> result = new HashMap<>();
+  public Result isExist(Role params) throws Exception {
+    Result result = new Result();
     List<Role> role = roleService.getRoles(null, null, params.getCode(), null).getRows();
     if (role != null && role.size() > 0) {
-      result.put("code", 0);
-      result.put("msg", "角色已存在");
+      result.setCode("0");
+      result.setMsg("角色已存在");
     } else {
-      result.put("code", 1);
-      result.put("msg", "notExist");
+      result.setCode("1");
+      result.setMsg("notExist");
     }
     return result;
   }
@@ -59,39 +58,48 @@ public class RoleController {
 
   @PostMapping(value = "/add")
   @PreAuthorize("authenticated and hasPermission(4, 'add')")
-  public Integer add(Role role) throws Exception {
+  public Result add(Role role) throws Exception {
+    Result result = new Result();
     roleService.addRole(role);
     redisTemplate.opsForValue().set("menus", indexService.builderMenus());
     this.log("编辑角色" + JSON.toJSONString(role));
-    return 1;
+    result.setCode("1");
+    result.setMsg("新增成功");
+    return result;
   }
 
   @PatchMapping(value = "/update")
   @PreAuthorize("authenticated and hasPermission(4, 'update')")
-  public Integer update(Role role) throws Exception {
+  public Result update(Role role) throws Exception {
+    Result result = new Result();
     roleService.updateRole(role);
     redisTemplate.opsForValue().set("menus", indexService.builderMenus());
     this.log("编辑角色" + JSON.toJSONString(role));
-    return 1;
+    result.setCode("1");
+    result.setMsg("修改成功");
+    return result;
   }
 
   @DeleteMapping(value = "/del")
   @PreAuthorize("authenticated and hasPermission(4, 'del')")
-  public Integer del(@RequestBody List<Role> roles) throws Exception {
+  public Result del(@RequestBody List<Role> roles) throws Exception {
+    Result result = new Result();
     roleService.delRole(roles);
     redisTemplate.opsForValue().set("menus", indexService.builderMenus());
     this.log("删除角色" + JSON.toJSONString(roles));
-    return 1;
+    result.setCode("1");
+    result.setMsg("删除成功");
+    return result;
   }
 
   @PostMapping(value = "/auth")
   @PreAuthorize("authenticated and hasPermission(4, 'auth')")
-  public Map<String, Object> auth(@RequestBody Auths auths) throws Exception {
-    Map<String, Object> result = new HashMap<>();
+  public Result auth(@RequestBody Auths auths) throws Exception {
+    Result result = new Result();
     roleService.auth(auths);
     this.log("角色授权" + JSON.toJSONString(auths.getPermissions()));
-    result.put("code", 1);
-    result.put("msg", "角色授权成功");
+    result.setCode("1");
+    result.setMsg("授权成功");
     return result;
   }
 
@@ -101,7 +109,7 @@ public class RoleController {
     return roleService.getRoleAuths(roleId);
   }
 
-  private void log(String text) throws Exception {
+  private void log(String text) {
     String userName =
         (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     ValueOperations<String, User> userOperations = redisTemplate.opsForValue();

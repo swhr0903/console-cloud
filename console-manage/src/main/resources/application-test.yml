@@ -23,7 +23,7 @@ spring:
       max-pool-prepared-statement-per-connection-size: 20
   redis:
     cluster:
-      nodes: 192.168.1.122:9001,192.168.1.122:9002,192.168.1.122:9003,192.168.1.122:9004,192.168.1.122:9005,192.168.1.122:9006
+      nodes: 10.0.1.42:9001,10.0.1.65:9001,10.0.1.69:9001,10.0.1.73:9001,10.0.1.74:9001,10.0.1.46:9001
     #password: 123456
     jedis:
       pool:
@@ -44,4 +44,6 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@eureka-server:8011/eureka/
+      defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@eurekaServer:8011/eureka/
+  instance:
+    prefer-ip-address: true

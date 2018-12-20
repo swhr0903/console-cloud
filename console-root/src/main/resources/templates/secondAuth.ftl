@@ -11,7 +11,7 @@
     <div class="login-box-body">
         <p class="login-box-msg">二次认证</p>
         <div class="form-group has-feedback">
-            <input id="authCode" class="form-control" placeholder="Google认证码">
+            <input id="authCode" class="form-control" maxlength="6" placeholder="Google认证码">
             <span class="glyphicon glyphicon-user form-control-feedback"></span>
             <div id="notExist" style="color: #a94442;"></div>
         </div>
@@ -41,8 +41,13 @@
             url: '/authGoogleCode',
             data: {'authCode': authCode},
             type: 'post',
-            success: function () {
-                window.location.href = "/";
+            success: function (result) {
+                if (result.code == "1") {
+                    window.location.href = "/";
+                } else {
+                    $('#warnModal').find('.modal-body').text(result.msg);
+                    $('#warnModal').modal('show');
+                }
             },
             error: function () {
                 $('#warnModal').find('.modal-body').text("验证码错误");

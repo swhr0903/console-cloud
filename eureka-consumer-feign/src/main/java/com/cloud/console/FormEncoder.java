@@ -28,7 +28,9 @@ public class FormEncoder implements Encoder {
         if (fieldValue != null) {
           sb.append(URLEncoder.encode(field.getName(), "UTF-8"))
               .append("=")
-              .append(URLEncoder.encode(field.get(JSONObject.parseObject(oStr, clazz)).toString()));
+              .append(
+                  URLEncoder.encode(
+                      field.get(JSONObject.parseObject(oStr, clazz)).toString(), "UTF-8"));
         }
       }
     } catch (ClassNotFoundException e) {

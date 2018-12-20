@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
-    <logger name="org.springframework.web" level="info"/>
+    <logger name="org.springframework.web" level="INFO"/>
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -9,11 +9,11 @@
         </encoder>
     </appender>
 
-    <!-- 操作日志 -->
+    <!-- manage日志 -->
     <property name="APP_LOG_PATH" value="logs/app"/>
-    <appender name="app" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="manage" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${APP_LOG_PATH}/user-%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>${APP_LOG_PATH}/manage-%d{yyyy-MM-dd}.log</FileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -74,8 +74,18 @@
         </root>
     </springProfile>
 
-    <!--开发环境:打印控制台-->
+    <!--开发、测试、生产环境:打印控制台-->
     <springProfile name="dev">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+    <springProfile name="test">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+    <springProfile name="prod">
         <root level="INFO">
             <appender-ref ref="CONSOLE"/>
         </root>

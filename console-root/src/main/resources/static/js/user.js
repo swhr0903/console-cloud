@@ -92,13 +92,13 @@ $(function () {
             type: "get",
             dataType: "json",
             success: function (result) {
-                if (result.code == '0') {
+                if (result.code == '1') {
+                    $('#edit').prop('disabled', false);
+                    $('#existTip').html('');
+                } else {
                     $('#existTip').html(result.msg);
                     $('#usernameAdd').focus();
                     $('#edit').prop('disabled', true);
-                } else {
-                    $('#edit').prop('disabled', false);
-                    $('#existTip').html('');
                 }
             }
         });
@@ -165,12 +165,7 @@ $(function () {
             dataType: 'json',
             data: {'userId': userId, 'roles': roleStr},
             success: function (result) {
-                if (result == '1') {
-                    $('#errorAuthTip').html("授权成功");
-                } else {
-                    $('#errorAuthTip').html("授权失败，请联系管理员");
-                }
-                $('#warnModal').modal('show');
+                $('#errorAuthTip').html(result.msg);
             }, error: function () {
                 $('#errorAuthTip').html("您没有此操作权限");
             }
@@ -279,9 +274,11 @@ var EditInit = function () {
                 url: '/manage/user/update',
                 type: 'patch',
                 data: params,
-                success: function (data) {
-                    if (data == '1') {
+                success: function (result) {
+                    if (result.code == '1') {
                         $('#tb_users').bootstrapTable('refresh', {url: '/manage/user/getUsers'});
+                    } else {
+                        $('#errorEditTip').html(result.msg);
                     }
                 },
                 error: function () {
@@ -320,13 +317,13 @@ function del() {
     $.ajax({
         url: '/manage/user/del',
         type: 'delete',
-        contentType : 'application/json;charset=utf-8',
+        contentType: 'application/json;charset=utf-8',
         data: params,
-        success: function (data) {
-            if (data == '1') {
+        success: function (result) {
+            if (result.code == '1') {
                 $('#tb_users').bootstrapTable('refresh', {url: '/manage/user/getUsers'});
             } else {
-                $('#warnModal').find('.modal-body').text('删除失败，请联系管理');
+                $('#warnModal').find('.modal-body').text(result.msg);
                 $('#warnModal').modal('show');
             }
         },
