@@ -28,10 +28,9 @@ spring:
       pool-prepared-statements: true
       max-pool-prepared-statement-per-connection-size: 20
   redis:
-    cluster:
-      nodes: 192.168.1.122:9001,192.168.1.122:9002,192.168.1.122:9003,192.168.1.122:9004,192.168.1.122:9005,
-        192.168.1.122:9006
-      #password: 123456
+    host: 192.168.1.102
+    port: 6379
+    password: 123456
     jedis:
       pool:
         max-active: 20
