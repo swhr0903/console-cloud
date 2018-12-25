@@ -25,6 +25,8 @@
 <script src="/static/bootstrap/js/bootstrap-treeview.min.js"></script>
 <script src="/static/bootstrap/js/fileinput.min.js"></script>
 <script src="/static/bootstrap/js/bootstrap-table-export.js"></script>
+<script src="/static/bootstrap/js/bootstrap-editable.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap-table-editable.min.js"></script>
 <script src="/static/bootstrap/js/tableExport.js"></script>
 <script src="/static/js/moment.min.js"></script>
 <script src="/static/js/common.js"></script>

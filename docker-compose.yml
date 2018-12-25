@@ -51,6 +51,21 @@ services:
         constraints: [node.labels.work == 2]
     depends_on:
       - eureka-server
+  config-server:
+    image: 192.168.1.102:5000/console/config-server:0.0.1-SNAPSHOT
+    hostname: config-server
+    volumes:
+      - /home/logs/config-server:/logs
+    networks:
+      - console-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.labels.work == 2]
+    depends_on:
+      - eureka-server
   root:
     image: 192.168.1.102:5000/console/root:0.0.1-SNAPSHOT
     hostname: console_root
@@ -66,6 +81,7 @@ services:
         constraints: [node.labels.work == 2]
     depends_on:
       - api-gateway
+      - config-server
 #        preferences:
 #          - spread: node.labels.work
   manage:
@@ -87,6 +103,7 @@ services:
 #          - spread: node.labels.work
     depends_on:
       - eureka-server
+      - config-server
       - api-gateway
 networks:
   console-net:

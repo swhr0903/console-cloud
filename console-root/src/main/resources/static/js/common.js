@@ -39,6 +39,15 @@ $(function () {
             }
         });
     });
+
+    //所有的ajax请求header里都带上version
+    $.ajaxPrefilter(function( options ) {
+        if ( !options.beforeSend) {
+            options.beforeSend = function (xhr) {
+                xhr.setRequestHeader('version', '0.0.1-SNAPSHOT');
+            }
+        }
+    });
 });
 
 //表格数据日期格式化

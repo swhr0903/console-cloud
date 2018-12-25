@@ -167,7 +167,7 @@ $(function () {
             success: function (result) {
                 $('#errorAuthTip').html(result.msg);
             }, error: function () {
-                $('#errorAuthTip').html("您没有此操作权限");
+                $('#errorAuthTip').html("服务不可用，请稍后再试");
             }
         });
     });
@@ -224,7 +224,7 @@ var TableInit = function () {
                 formatter: timeFormater
             }],
             onLoadError: function () {
-                $('#warnModal').find('.modal-body').text('您没有此操作权限');
+                $('#warnModal').find('.modal-body').text('服务不可用，请稍后再试');
                 $('#warnModal').modal('show');
             }
         });
@@ -282,7 +282,7 @@ var EditInit = function () {
                     }
                 },
                 error: function () {
-                    $('#errorEditTip').html("您没有此操作权限");
+                    $('#errorEditTip').html("服务不可用，请稍后再试");
                 }
             });
         });
@@ -328,7 +328,7 @@ function del() {
             }
         },
         error: function () {
-            $('#warnModal').find('.modal-body').text('您没有此操作权限');
+            $('#warnModal').find('.modal-body').text('服务不可用，请稍后再试');
             $('#warnModal').modal('show');
         }
     });

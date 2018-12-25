@@ -87,7 +87,7 @@ public class ModuleController {
     redisTemplate.opsForValue().set("menus", indexService.builderMenus());
     this.log("编辑模块" + JSON.toJSONString(module));
     result.setCode("1");
-    result.setCode("修改成功");
+    result.setMsg("修改成功");
     return result;
   }
 
@@ -129,16 +129,19 @@ public class ModuleController {
     if (StringUtils.isNotBlank(moduleName)) {
       modules = moduleService.getModuleByName(moduleName);
       if (modules.size() > 0) {
-        String[] options = modules.get(0).getOptions().split(",");
-        StringBuilder stringBuilder = new StringBuilder();
-        int i = 0;
-        for (String option : options) {
-          stringBuilder
-              .append(Options.getCodeByName(option))
-              .append(i < options.length - 1 ? "," : "");
-          i++;
+        String options = modules.get(0).getOptions();
+        if (StringUtils.isNotBlank(options)) {
+          String[] optionArray = options.split(",");
+          StringBuilder stringBuilder = new StringBuilder();
+          int i = 0;
+          for (String option : optionArray) {
+            stringBuilder
+                .append(Options.getCodeByName(option))
+                .append(i < optionArray.length - 1 ? "," : "");
+            i++;
+          }
+          oMap.put("option", stringBuilder.toString());
         }
-        oMap.put("option", stringBuilder.toString());
       }
     }
     List<Map<String, String>> options = new ArrayList<>();

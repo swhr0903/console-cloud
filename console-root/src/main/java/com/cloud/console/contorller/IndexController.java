@@ -143,4 +143,45 @@ public class IndexController {
     model.addAttribute("summary", "系统角色数据");
     return "index";
   }
+
+  @RequestMapping(value = "/dict/all")
+  @PreAuthorize("authenticated and hasPermission(5, 'all')")
+  public String dicts(Model model) throws Exception {
+    ValueOperations<String, String> StringOperations = redisTemplate.opsForValue();
+    String menus = StringOperations.get("menus");
+    String userName =
+            (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    if (StringUtils.isBlank(userName)) {
+      return "login";
+    }
+    List<GrantedAuthority> grantedAuthorities =
+            (List<GrantedAuthority>)
+                    SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+    StringBuilder roles = new StringBuilder();
+    for (int i = 0; i < grantedAuthorities.size(); i++) {
+      GrantedAuthority grantedAuthority = grantedAuthorities.get(i);
+      roles
+              .append(grantedAuthority.getAuthority().split("_")[1])
+              .append(i < grantedAuthorities.size() - 1 ? "," : "");
+    }
+    if ("admin".equals(userName)) {
+      model.addAttribute("role", "ADMIN");
+    } else {
+      model.addAttribute(
+              "role", StringUtils.isNotBlank(roles.toString()) ? roles.toString() : "NEWBIE");
+    }
+    ValueOperations<String, User> userOperations = redisTemplate.opsForValue();
+    User user = userOperations.get(userName);
+    model.addAttribute("user", userName);
+    model.addAttribute("page", "dictionary.ftl");
+    String avatar = user.getAvatar();
+    if (StringUtils.isNotBlank(avatar)) {
+      model.addAttribute("avatar", avatar);
+    }
+    model.addAttribute("createTime", user.getCreate_time());
+    model.addAttribute("menus", menus);
+    model.addAttribute("title", "系统字段管理");
+    model.addAttribute("summary", "系统字段数据");
+    return "index";
+  }
 }

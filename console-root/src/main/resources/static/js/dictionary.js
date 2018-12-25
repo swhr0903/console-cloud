@@ -11,7 +11,7 @@ $(function () {
     var exprotInit = new ExportInit();
     exprotInit.Init();
     $('#btn_edit').click(function () {
-        var selects = $('#tb_modules').bootstrapTable('getSelections');
+        var selects = $('#tb_dictionary').bootstrapTable('getSelections');
         if (selects.length != 1) {
             $('#warnModal').find('.modal-body').text("请选择一行进行编辑");
             $('#warnModal').modal('show');
@@ -27,7 +27,7 @@ $(function () {
     });
     $('#editModal').on('show.bs.modal', function () {
         //初始化表单
-        var selects = $('#tb_modules').bootstrapTable('getSelections');
+        var selects = $('#tb_dictionary').bootstrapTable('getSelections');
         var moduleName;
         if (selects && selects.length > 0) {
             moduleName = selects[0].name;
@@ -109,7 +109,7 @@ $(function () {
     });
     $.ajax({
         type: 'get',
-        url: '/manage/module/getModules',
+        url: '/manage/dict/getDicts',
         success: function (data) {
             var options = '';
             $.each(data, function (index, value) {
@@ -127,8 +127,8 @@ var TableInit = function () {
     var oTableInit = new Object();
     //初始化Table
     oTableInit.Init = function () {
-        $('#tb_modules').bootstrapTable({
-            url: '/manage/module/getModulesPaging',
+        $('#tb_dictionary').bootstrapTable({
+            url: '/manage/dict/getDictsPaging',
             method: 'get',
             toolbar: '#toolbar',
             idField: 'id',
@@ -160,26 +160,59 @@ var TableInit = function () {
                 field: 'id',
                 title: '模块ID'
             }, {
-                field: 'name',
-                title: '模块名'
+                field: 'dict_name',
+                title: '字段名',
+                editable: {
+                    type: 'text',
+                    title: '字段名',
+                    validate: function (v) {
+                        if (!v) return '字段名不能为空';
+
+                    }
+                }
             }, {
-                field: 'url',
-                title: '模块URL'
-            }, {
-                field: 'parent',
-                title: '父模块'
-            }, {
-                field: 'is_leaf',
-                title: '是否子模块',
-                formatter: statusFormater
-            }, {
-                field: 'options',
-                title: '功能项'
+                field: 'dict_value',
+                title: '字段值',
+                editable: {
+                    type: 'text',
+                    title: '字段值',
+                    validate: function (v) {
+                        if (!v) return '字段值不能为空';
+                    }
+                }
             }, {
                 field: 'status',
                 title: '是否启用',
-                formatter: statusFormater
+                formatter: statusFormater,
+                editable: {
+                    type: 'text',
+                    title: '状态',
+                    validate: function (v) {
+                        if (!v) return '状态不能为空';
+
+                    }
+                }
             }],
+            onEditableSave: function (field, row, oldValue, $el) {
+                $.ajax({
+                    type: "patch",
+                    url: "/manage/dict/update",
+                    data: row,
+                    dataType: 'json',
+                    success: function (result) {
+                        $('#warnModal').find('.modal-body').text(result.msg);
+                        $('#warnModal').modal('show');
+                    },
+                    error: function () {
+                        $('#warnModal').find('.modal-body').text('修改异常：' + result.msg);
+                        $('#warnModal').modal('show');
+                    },
+                    complete: function () {
+
+                    }
+
+                });
+            },
             onLoadError: function () {
                 $('#warnModal').find('.modal-body').text('服务不可用，请稍后再试');
                 $('#warnModal').modal('show');
@@ -212,7 +245,7 @@ var QueryInit = function () {
     var oInit = new Object();
     oInit.Init = function () {
         $('#query').click(function () {
-            $('#tb_modules').bootstrapTable('refresh', {url: '/manage/module/getModulesPaging'});
+            $('#tb_dictionary').bootstrapTable('refresh', {url: '/manage/dict/getDictsPaging'});
         });
         $(document).keydown(function (event) {
             if (event.keyCode == 13) {
@@ -247,10 +280,10 @@ var EditInit = function () {
             var url, httpType;
             if (id != undefined && id != '') {
                 httpType = 'patch';
-                url = '/manage/module/update'
+                url = '/manage/dict/update'
             } else {
                 httpType = 'post';
-                url = '/manage/module/add'
+                url = '/manage/dict/add'
             }
             $.ajax({
                 url: url,
@@ -259,7 +292,7 @@ var EditInit = function () {
                 success: function (result) {
                     if (result.code == '1') {
                         $('#editModal').modal('hide');
-                        $('#tb_modules').bootstrapTable('refresh', {url: '/manage/module/getModulesPaging'});
+                        $('#tb_dictionary').bootstrapTable('refresh', {url: '/manage/dict/getModulesPaging'});
                     } else {
                         $('#errorEditTip').html(result.msg);
                     }
@@ -305,7 +338,7 @@ var ExportInit = function () {
                 }
             });
             $.ajax({
-                url: '/manage/module/export',
+                url: '/manage/dict/export',
                 type: 'get',
                 data: colObj,
                 success: function (result) {
@@ -326,19 +359,19 @@ var ExportInit = function () {
 };
 
 function del() {
-    var selects = $('#tb_modules').bootstrapTable('getSelections');
+    var selects = $('#tb_dictionary').bootstrapTable('getSelections');
     if (!selects) {
         return e.preventDefault();
     }
     var params = JSON.stringify(selects);
     $.ajax({
-        url: '/manage/module/del',
+        url: '/manage/dict/del',
         type: 'delete',
         contentType: 'application/json;charset=utf-8',
         data: params,
         success: function (result) {
             if (result.code == '1') {
-                $('#tb_modules').bootstrapTable('refresh', {url: '/manage/module/getModulesPaging'});
+                $('#tb_dictionary').bootstrapTable('refresh', {url: '/manage/dict/getModulesPaging'});
             } else {
                 $('#warnModal').find('.modal-body').text(result.msg);
                 $('#warnModal').modal('show');
@@ -353,7 +386,7 @@ function del() {
 
 function selDomain(val, text) {
     $('#dataDomain').text(text);
-    $('#tb_modules').bootstrapTable('refreshOptions', {
+    $('#tb_dictionary').bootstrapTable('refreshOptions', {
         exportDataType: val
     });
 }
