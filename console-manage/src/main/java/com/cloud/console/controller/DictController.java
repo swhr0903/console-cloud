@@ -2,17 +2,15 @@ package com.cloud.console.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.cloud.console.Result;
+import com.cloud.console.common.Logger;
 import com.cloud.console.po.Dict;
 import com.cloud.console.po.Module;
-import com.cloud.console.po.User;
 import com.cloud.console.service.DictService;
 import com.cloud.console.service.Paging;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,11 +19,12 @@ import java.util.List;
 /** Created by Frank on 2018-12-21. */
 @RestController
 @RequestMapping("/dict")
-@Slf4j(topic = "manage")
 public class DictController {
 
   @Autowired RedisTemplate redisTemplate;
   @Autowired DictService dictService;
+  @Autowired
+  Logger logger;
 
   @GetMapping(value = "/isExist")
   public Result isExist(Dict params) throws Exception {
@@ -59,7 +58,7 @@ public class DictController {
   public Result edit(Dict dict) throws Exception {
     Result result = new Result();
     dictService.updateDict(dict);
-    this.log("修改系统字段" + JSON.toJSONString(dict));
+    logger.log("修改系统字段" + JSON.toJSONString(dict));
     result.setCode("1");
     result.setMsg("修改成功");
     return result;
@@ -70,17 +69,9 @@ public class DictController {
   public Result del(@RequestBody List<Dict> modules) throws Exception {
     Result result = new Result();
     dictService.delDict(modules);
-    this.log("删除系统字段" + JSON.toJSONString(modules));
+    logger.log("删除系统字段" + JSON.toJSONString(modules));
     result.setCode("1");
     result.setCode("删除成功");
     return result;
-  }
-
-  private void log(String text) {
-    String userName =
-        (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    ValueOperations<String, User> userOperations = redisTemplate.opsForValue();
-    User user = userOperations.get(userName);
-    log.info(user.getUsername() + text);
   }
 }

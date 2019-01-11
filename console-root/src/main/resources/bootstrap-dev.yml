@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: console-root
+  cloud:
+    config:
+      uri: http://127.0.0.1:8014/
+      profile: dev
+      label: master
+logging:
+  config: http://127.0.0.1:8014/console-config/blob/master/logback.xml

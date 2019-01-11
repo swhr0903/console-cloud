@@ -2,15 +2,14 @@ package com.cloud.console.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.cloud.console.Result;
+import com.cloud.console.common.Logger;
 import com.cloud.console.po.User;
 import com.cloud.console.service.Paging;
 import com.cloud.console.service.UserService;
 import com.cloud.console.vo.UserRole;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -25,11 +24,11 @@ import java.util.Map;
 /** Created by Frank on 2017/8/8. */
 @RestController
 @RequestMapping("/user")
-@Slf4j(topic = "manage")
 public class UserController {
 
   @Autowired RedisTemplate redisTemplate;
   @Autowired UserService userService;
+  @Autowired Logger logger;
 
   @GetMapping("/getUsers")
   @PreAuthorize("authenticated and hasPermission(3, 'query')")
@@ -86,7 +85,7 @@ public class UserController {
       result.setCode("1");
       result.setMsg("注册失败，用户资料不全");
     }
-    this.log(user.getUsername() + "注册成功");
+    logger.log(user.getUsername() + "注册成功");
     return result;
   }
 
@@ -97,7 +96,7 @@ public class UserController {
     if (user != null && StringUtils.isNotBlank(user.getUsername())) {
       userService.updateUser(user);
     }
-    this.log("编辑用户" + JSON.toJSONString(user));
+    logger.log("编辑用户" + JSON.toJSONString(user));
     result.setCode("1");
     result.setMsg("修改成功");
     return result;
@@ -108,7 +107,7 @@ public class UserController {
   public Result del(@RequestBody List<User> users) throws Exception {
     Result result = new Result();
     userService.delUser(users);
-    this.log("删除用户" + JSON.toJSONString(users));
+    logger.log("删除用户" + JSON.toJSONString(users));
     result.setCode("1");
     result.setMsg("修改成功");
     return result;
@@ -119,7 +118,7 @@ public class UserController {
   public Result auth(Long userId, String roles) throws Exception {
     Result result = new Result();
     userService.auth(userId, roles);
-    this.log("授予" + userId + "角色" + roles);
+    logger.log("授予" + userId + "角色" + roles);
     result.setCode("1");
     result.setMsg("授权成功");
     return result;
@@ -142,13 +141,5 @@ public class UserController {
     result.setCode("1");
     result.setMsg("上传成功");
     return result;
-  }
-
-  private void log(String text) {
-    String userName =
-        (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    ValueOperations<String, User> userOperations = redisTemplate.opsForValue();
-    User user = userOperations.get(userName);
-    log.info(user != null ? user.getUsername() : "" + text);
   }
 }

@@ -1,5 +1,6 @@
 package com.cloud.console.controller;
 
+import com.cloud.console.common.Logger;
 import com.cloud.console.service.IndexService;
 import com.cloud.console.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

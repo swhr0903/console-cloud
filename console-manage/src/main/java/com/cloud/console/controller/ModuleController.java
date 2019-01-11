@@ -3,6 +3,7 @@ package com.cloud.console.controller;
 import com.alibaba.fastjson.JSON;
 import com.cloud.console.Result;
 import com.cloud.console.common.ExportUtils;
+import com.cloud.console.common.Logger;
 import com.cloud.console.po.Module;
 import com.cloud.console.po.User;
 import com.cloud.console.service.IndexService;
@@ -25,12 +26,13 @@ import java.util.*;
 /** Created by Frank on 2017/8/3. */
 @RestController
 @RequestMapping("/module")
-@Slf4j(topic = "manage")
 public class ModuleController {
 
   @Autowired RedisTemplate redisTemplate;
   @Autowired ModuleService moduleService;
   @Autowired IndexService indexService;
+  @Autowired
+  Logger logger;
 
   @GetMapping(value = "/isExist")
   public Result isExist(Module params) throws Exception {
@@ -69,7 +71,7 @@ public class ModuleController {
     }
     moduleService.addModule(module);
     redisTemplate.opsForValue().set("menus", indexService.builderMenus());
-    this.log("编辑模块" + JSON.toJSONString(module));
+    logger.log("编辑模块" + JSON.toJSONString(module));
     result.setCode("1");
     result.setCode("新增成功");
     return result;
@@ -85,7 +87,7 @@ public class ModuleController {
     }
     moduleService.updateModule(module);
     redisTemplate.opsForValue().set("menus", indexService.builderMenus());
-    this.log("编辑模块" + JSON.toJSONString(module));
+    logger.log("编辑模块" + JSON.toJSONString(module));
     result.setCode("1");
     result.setMsg("修改成功");
     return result;
@@ -97,7 +99,7 @@ public class ModuleController {
     Result result = new Result();
     moduleService.delModule(modules);
     redisTemplate.opsForValue().set("menus", indexService.builderMenus());
-    this.log("删除模块" + JSON.toJSONString(modules));
+    logger.log("删除模块" + JSON.toJSONString(modules));
     result.setCode("1");
     result.setCode("删除成功");
     return result;
@@ -154,13 +156,5 @@ public class ModuleController {
     }
     oMap.put("options", options);
     return oMap;
-  }
-
-  private void log(String text) {
-    String userName =
-        (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    ValueOperations<String, User> userOperations = redisTemplate.opsForValue();
-    User user = userOperations.get(userName);
-    log.info(user.getUsername() + text);
   }
 }
