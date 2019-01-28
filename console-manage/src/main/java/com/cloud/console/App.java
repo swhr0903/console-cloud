@@ -6,7 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * Created by Frank on 2017/8/3.
@@ -26,5 +29,14 @@ public class App extends SpringBootServletInitializer {
 
   public static void main(String[] args) {
     SpringApplication.run(App.class, args);
+  }
+
+  @Bean
+  RestTemplate restTemplate() {
+    SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+    requestFactory.setConnectTimeout(1000);
+    requestFactory.setReadTimeout(1000);
+    RestTemplate restTemplate = new RestTemplate(requestFactory);
+    return restTemplate;
   }
 }

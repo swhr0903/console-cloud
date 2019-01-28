@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /** Created by Frank on 2019-01-14. */
-@Slf4j
+@Slf4j(topic = "mq")
 public class ThreadPoolConsumer<T> {
   private ExecutorService executor;
   private volatile boolean stop = false;
@@ -27,7 +27,6 @@ public class ThreadPoolConsumer<T> {
 
     public ThreadPoolConsumerBuilder<T> setThreadCount(int threadCount) {
       this.threadCount = threadCount;
-
       return this;
     }
 
@@ -102,7 +101,6 @@ public class ThreadPoolConsumer<T> {
             public void run() {
               while (!stop) {
                 try {
-                  // 2
                   Response response = consumer.consume();
 
                   if (infoHolder.intervalMils > 0) {

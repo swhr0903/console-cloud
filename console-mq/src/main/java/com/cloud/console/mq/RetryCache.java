@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 /** Created by Frank on 2019-01-14. */
-@Slf4j
+@Slf4j(topic = "mq")
 public class RetryCache {
   private Producer sender;
   private boolean stop = false;

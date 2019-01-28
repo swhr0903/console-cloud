@@ -12,10 +12,10 @@
     <url>http://maven.apache.org</url>
 
     <dependencies>
-        <!--<dependency>
+        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-        </dependency>-->
+        </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
@@ -35,10 +35,10 @@
             <artifactId>feign-form-spring</artifactId>
             <version>3.4.1</version>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>com.cloud</groupId>
             <artifactId>console-security</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-        </dependency>
+        </dependency>-->
     </dependencies>
 </project>

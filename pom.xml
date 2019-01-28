@@ -10,11 +10,12 @@
     <modules>
         <module>eureka-server</module>
         <module>api-gateway</module>
+        <module>config-server</module>
         <module>eureka-consumer-feign</module>
         <module>console-root</module>
         <module>console-security</module>
         <module>console-manage</module>
-        <module>config-server</module>
+        <module>console-tx</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

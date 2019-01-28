@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
 /** Created by Frank on 2019-01-14. */
-@Slf4j
+@Slf4j(topic = "mq")
 @Component
 public class MQBuilder {
 
