@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 /** Created by Frank on 2018/3/28. */
 @FeignClient(
-    value = "console-user",
+    value = "console-manage",
     path = "user" /*, configuration = FeignFormSupportConfig.class*/)
 public interface UserClient {
 

@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option java_package = "com.cloud.console.grpc";
+option java_outer_classname = "RoleServiceProto";
+
+service RoleService {
+    rpc getRole (Role) returns (RoleList);
+}
+
+message Role {
+    sint64 id = 1;
+    string code = 2;
+    string name = 3;
+    int32 status = 4;
+}
+message RoleList {
+    repeated Role role = 1;
+}
+
+message Result {
+    bool isSuccess = 1;
+    string msg = 2;
+}

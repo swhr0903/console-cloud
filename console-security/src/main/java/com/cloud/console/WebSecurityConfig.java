@@ -35,7 +35,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/getBackPwd",
             "/verifyBackPwd",
             "/restPwd",
-            "/getAuthConfig")
+            "/getAuthConfig",
+            "/swagger-ui.html",
+            "/swagger-resources/**",
+            "/v2/api-docs",
+            "/webjars/springfox-swagger-ui/**")
         .permitAll()
         .anyRequest()
         .authenticated()

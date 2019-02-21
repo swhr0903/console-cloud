@@ -30,6 +30,11 @@
             <artifactId>console-security</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.battcn</groupId>
+            <artifactId>swagger-spring-boot-starter</artifactId>
+            <version>2.1.4-RELEASE</version>
+        </dependency>
     </dependencies>
 
     <build>

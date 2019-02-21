@@ -5,14 +5,14 @@ spring:
     user:
       name: frank
       password: aa000000
-  #  autoconfigure:
-  #    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration,
-  #      org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration,
-  #      com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+#  autoconfigure:
+#    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration,
+#      org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration,
+#      com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
   datasource:
     druid:
       filters: config,stat,wall
-      connect-properties: config.file=http://47.92.159.62/druid/druid-console.properties
+      connect-properties: config.file=http://47.92.159.62/druid/druid-console-mycat.properties
       url:
       username:
       password:
