@@ -29,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/static/**",
             "/favicon.ico",
             "/register",
-            "/user/isExist/**",
+            "/**/user/isExist/**",
             "/actuator/**",
             "/forgetPwd",
             "/getBackPwd",
@@ -38,7 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/getAuthConfig",
             "/swagger-ui.html",
             "/swagger-resources/**",
-            "/v2/api-docs",
+            "/**/v2/api-docs",
             "/webjars/springfox-swagger-ui/**")
         .permitAll()
         .anyRequest()

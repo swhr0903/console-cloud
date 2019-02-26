@@ -7,8 +7,6 @@ import com.cloud.console.po.User;
 import com.cloud.console.service.Paging;
 import com.cloud.console.service.UserService;
 import com.cloud.console.vo.UserRole;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -26,7 +24,6 @@ import java.util.Map;
 /** Created by Frank on 2017/8/8. */
 @RestController
 @RequestMapping("/user")
-@Api(value = "用户管理")
 public class UserController {
 
   @Autowired RedisTemplate redisTemplate;
@@ -94,7 +91,6 @@ public class UserController {
 
   @PatchMapping("/update")
   @PreAuthorize("authenticated and hasPermission(3, 'update')")
-  @ApiOperation(value = "用户更新")
   public Result edit(User user) throws Exception {
     Result result = new Result();
     if (user != null && StringUtils.isNotBlank(user.getUsername())) {

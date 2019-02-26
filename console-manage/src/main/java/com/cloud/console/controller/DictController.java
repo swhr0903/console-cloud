@@ -7,6 +7,8 @@ import com.cloud.console.po.Dict;
 import com.cloud.console.po.Module;
 import com.cloud.console.service.DictService;
 import com.cloud.console.service.Paging;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -19,6 +21,7 @@ import java.util.List;
 /** Created by Frank on 2018-12-21. */
 @RestController
 @RequestMapping("/dict")
+@Api
 public class DictController {
 
   @Autowired RedisTemplate redisTemplate;
@@ -55,6 +58,7 @@ public class DictController {
 
   @PatchMapping(value = "/update")
   @PreAuthorize("authenticated and hasPermission(2, 'update')")
+  @ApiOperation("系统字段修改")
   public Result edit(Dict dict) throws Exception {
     Result result = new Result();
     dictService.updateDict(dict);

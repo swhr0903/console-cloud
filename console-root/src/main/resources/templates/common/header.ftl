@@ -281,15 +281,11 @@
         }
     });
     $('#usernameConfig').change(function () {
-        var params = JSON.stringify({
-            "username": $('#usernameConfig').val(),
-        });
         $.ajax({
-            url: '/manage/user/isExist',
-            type: "post",
+            url: '/manage/user/isExist/' + $('#usernameConfig').val(),
+            type: "get",
             contentType: 'application/json',
             dataType: "json",
-            data: params,
             success: function (result) {
                 if (result.code == '0') {
                     $('#existTip1').html('帐号已存在');

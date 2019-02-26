@@ -21,7 +21,7 @@ public class ApiFallbackProvider implements FallbackProvider {
 
   @Override
   public ClientHttpResponse fallbackResponse(String route, Throwable cause) {
-    String message = "";
+    String message;
     if (cause instanceof HystrixTimeoutException) {
       message = "Timeout";
     } else {
@@ -53,8 +53,7 @@ public class ApiFallbackProvider implements FallbackProvider {
 
       @Override
       public InputStream getBody() {
-        String bodyText =
-            String.format("{\"code\": 999,\"msg\": \"服务不可用:%s\"}", message);
+        String bodyText = String.format("{\"code\": 999,\"msg\": \"服务不可用:%s\"}", message);
         return new ByteArrayInputStream(bodyText.getBytes());
       }
 
