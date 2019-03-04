@@ -10,14 +10,32 @@ spring:
     user:
       name: frank
       password: aa000000
+  cloud:
+    loadbalancer:
+      retry:
+        enable: true
 server:
   port: 8011
 eureka:
+  server:
+    use-read-only-response-cache: false
+    eviction-interval-timer-in-ms: 3000
   instance:
     hostname: ${spring.application.name}
     instance-id: ${spring.application.name}:${server.port}
+    lease-expiration-duration-in-seconds: 15
+    lease-renewal-interval-in-seconds: 5
   client:
     registerWithEureka: false
+    registryFetchIntervalSeconds: 5
     fetchRegistry: false
     serviceUrl:
       defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@${eureka.instance.hostname}:${server.port}/eureka/
+ribbon:
+  ServerListRefreshInterval: 5000
+  OkToRetryOnAllOperations: true
+  MaxAutoRetriesNextServer: 3
+  MaxAutoRetries: 1
+  ReadTimeout: 30000
+  ConnectTimeout: 3000
+  retryableStatusCodes: 404,500,503
