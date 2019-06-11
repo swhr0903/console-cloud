@@ -96,29 +96,26 @@ public class ThreadPoolConsumer<T> {
               infoHolder.type);
 
       executor.execute(
-          new Runnable() {
-            @Override
-            public void run() {
-              while (!stop) {
-                try {
-                  Response response = consumer.consume();
+          () -> {
+            while (!stop) {
+              try {
+                Response response = consumer.consume();
 
-                  if (infoHolder.intervalMils > 0) {
-                    try {
-                      Thread.sleep(infoHolder.intervalMils);
-                    } catch (InterruptedException e) {
-                      e.printStackTrace();
-                      log.info("interrupt ", e);
-                    }
+                if (infoHolder.intervalMils > 0) {
+                  try {
+                    Thread.sleep(infoHolder.intervalMils);
+                  } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    log.info("interrupt ", e);
                   }
-
-                  if (!response.getIsSuccess()) {
-                    log.info("run error " + response.getErrMsg());
-                  }
-                } catch (Exception e) {
-                  e.printStackTrace();
-                  log.info("run exception ", e);
                 }
+
+                if (!response.getIsSuccess()) {
+                  log.info("run error " + response.getErrMsg());
+                }
+              } catch (Exception e) {
+                e.printStackTrace();
+                log.info("run exception ", e);
               }
             }
           });
